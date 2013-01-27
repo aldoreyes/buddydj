@@ -23,7 +23,7 @@ Loader!
 		<div class="jumbotron">
 	        <h1>What are your friends jamming to?</h1>
 	        <p class="lead">Let your friends be the DJ. Facebook DJ will play what your friends are listening to in real-time.</p>
-	        <a class="btn btn-primary btn-large" href="#">Sign in with Facebook</a>
+	        <a class="btn btn-primary btn-large" href="#" id="fbLoginButton">Sign in with Facebook</a>
 	      </div>
 
 	      <hr>
