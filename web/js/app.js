@@ -107,7 +107,7 @@ var FDJ = {
 				},
 
 				getLastSongs:function(){
-					FB.api('/me?fields=friends.fields(music.listens.fields(id, from, publish_time, application, data).limit(5))', $.proxy(this.onLastSongs, this));
+					FB.api('/me?fields=friends.fields(music.listens.fields(id,from,publish_time,application,data).limit(5))', $.proxy(this.onLastSongs, this));
 
 				},
 
