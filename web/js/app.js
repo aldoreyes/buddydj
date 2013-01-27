@@ -289,11 +289,15 @@ var FDJ = {
 					console.log(this);
 					var obj = this.$el;
 					var t = this;
-					
+					obj.html("");
+					obj.append(view.$el);
+						t.$('#wrapper').attr('style', 'margin-top:' + t.$('#header').height() + "px");
+						view.reInit();
+					/*
 					obj.fadeOut(500, function() {
 						//console.log($el);
 						obj.html("");
-					    obj.append(view.$el);
+					    	obj.append(view.$el);
 						obj.fadeIn(500, function() {
 							//TO DO!! change this to media queries...getto hack for now
 							t.$('#wrapper').attr('style', 'margin-top:' + t.$('#header').height() + "px");
@@ -301,6 +305,7 @@ var FDJ = {
 							//view.reInit();
 						});
 					});
+					*/
 					
 				}
 
