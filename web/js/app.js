@@ -291,10 +291,10 @@ var FDJ = {
 				
 					console.log(obj);
 					console.log("html treatment");
-					 obj.show().fadeTo(500, 0,function(){
+					 obj.fadeTo(500, 0,function(){
 							obj.html(view.$el);
 							console.log("finished dimming down");
-					        obj.show().fadeTo(500,1,function(){
+					        obj.fadeTo(500,1,function(){
 								console.log("finished dimming UP");
 								//TO DO!! change this to media queries...getto hack for now
 								t.$('#wrapper').attr('style', 'margin-top:' + t.$('#header').height() + "px");
