@@ -14,6 +14,8 @@
 	<a id="debug-login-button" href="#">User Login</a>
 	<br>
 	<a id="debug-logout-button" href="#">User Logout</a>
+	<br>
+	<a id="debug-add-song" href="#">Add Song</a>
 </div>
 
 <script type="text/template" id="loader-template">
@@ -70,10 +72,40 @@ Loader!
         </div>
       </div>
  </div>
-<div id="container-songs">	
-	<div class="hero-unit song">
-	        <p>This is a song</p>
-	        <p><a class="btn btn-primary btn-large">Learn more »</a></p>
+
+<div id="wrapper">
+<div id="container" class="clearfix">	
+		<div class="song" data-symbol="1">
+		        <p>This is a song1</p>
+		        <p><a class="btn btn-primary btn-large">Learn more »</a></p>
+		</div>
+		<div class="song" data-symbol="4">
+		        <p>This is a song4</p>
+		        <p><a class="btn btn-primary btn-large">Learn more »</a></p>
+		</div>
+		<div class="song" data-symbol="3">
+		        <p>This is a song3</p>
+		        <p><a class="btn btn-primary btn-large">Learn more »</a></p>
+		</div>
+			<div class="song" data-symbol="3">
+			        <p>This is a song3</p>
+			        <p><a class="btn btn-primary btn-large">Learn more »</a></p>
+			</div>
+				<div class="song" data-symbol="3">
+				        <p>This is a song3</p>
+				        <p><a class="btn btn-primary btn-large">Learn more »</a></p>
+				</div>
+					<div class="song" data-symbol="3">
+					        <p>This is a song3</p>
+					        <p><a class="btn btn-primary btn-large">Learn more »</a></p>
+					</div>
+						<div class="song" data-symbol="3">
+						        <p>This is a song3</p>
+						        <p><a class="btn btn-primary btn-large">Learn more »</a></p>
+						</div>
+		<script>
+
+	  </script>
 	</div>
 </div>
 <div class="navbar navbar-inverse navbar-fixed-bottom">
@@ -97,5 +129,6 @@ Loader!
 	<script src="js/libs/underscore-min.js"></script>
 	<script src="js/libs/backbone-min.js"></script>
 	<script src="js/app.js"></script>
+	<script src="js/jquery.isotope.min.js"></script>
 </body>
 </html>

@@ -21,6 +21,7 @@ var FDJ = {
 					this.listenTo(this.get('facebookProxy'), 'change:last_songs', this.onLastSongsChange);
 					this.set('current_queue', new FDJ.Collections.Queue());
 					this.get('current_queue').comparator = this.DCSortBy;
+					
 				},
 
 				onLastSongsChange:function(){
@@ -155,6 +156,10 @@ var FDJ = {
 				render:function(){
 					this.$el.html(this.template());
 					return this;
+				},
+				
+				reInit:function(){
+					
 				}
 			});
 			
@@ -164,7 +169,7 @@ var FDJ = {
 				template: _.template($('#login-template').html()),
 
 				initialize:function(){
-				
+					console.log("login init");
 					this.render();
 				},
 				
@@ -174,12 +179,17 @@ var FDJ = {
 				},
 				
 				doLogin:function(){
+					event.preventDefault();
 					this.model.doLogin();
 				},
 
 				render:function(){
 					this.$el.html(this.template());
 					return this;
+				},
+
+				reInit:function(){
+					console.log("login re-init");
 				}
 			});
 			
@@ -188,7 +198,7 @@ var FDJ = {
 				template: _.template($('#player-template').html()),
 
 				initialize:function(){
-					
+					console.log("player init");
 					this.render();
 					
 					
@@ -198,8 +208,34 @@ var FDJ = {
 					"click #fbLogoutButton": "doLogout"
 				},
 				
+				addSong:function(){
+					var $container = $('#container');
+					var newElement = '<div class="song" data-symbol="3"><p>This is a song3</p><p><a class="btn btn-primary btn-large">Learn more »</a></p></div>';	
+		        	var $newEls = $( newElement);
+		        	$container.prepend( $newEls ).isotope('reloadItems').isotope({ sortBy: 'original-order' })
+		          	// set sort back to symbol for inserting
+		          	.isotope('option', { sortBy: 'symbol' });
+				},
+				
 				doLogout:function(){
 					this.model.doLogout();
+				},
+				
+				reInit:function(){
+					var $container = $('#container');
+					
+					$container.isotope({
+		        		itemSelector : '.song',
+		        		filter: '*',
+		        		getSortData : {
+		          			symbol : function( $elem ) {
+		            			return $elem.attr('data-symbol');
+		          			}
+		        		},
+		        		sortBy : 'symbol'
+		      		});
+					
+					//console.log(this.$('#header').height());
 				},
 
 				render:function(){
@@ -217,12 +253,12 @@ var FDJ = {
 					this.model.get('facebookProxy').loadJDKAndInit();
 					var isLoggedIn = this.model.get('facebookProxy').get('isLoggedIn');
 				
-					this.loaderView = new FDJ.Views.LoaderView().$el;
-					this.loginView = new FDJ.Views.LoginView({ model: this.model.get('facebookProxy') } ).$el;
-					this.playerView = new FDJ.Views.PlayerView({ model: this.model.get('facebookProxy') } ).$el;
+					//this.loaderView = new FDJ.Views.LoaderView();
+					//this.loginView = new FDJ.Views.LoginView({ model: this.model.get('facebookProxy') } );
+					//this.playerView = new FDJ.Views.PlayerView({ model: this.model.get('facebookProxy') } );
 					
 					if(isLoggedIn){
-						this.transitionTo(this.playerView);
+						this.transitionTo(new FDJ.Views.PlayerView({ model: this.model.get('facebookProxy') } ));
 					}
 					
 					this.$el.append(new FDJ.Views.LoaderView().$el);
@@ -234,25 +270,28 @@ var FDJ = {
 					var isLoggedIn = this.model.get('facebookProxy').get('isLoggedIn');
 
 					if(isLoggedIn){
-						this.transitionTo(this.playerView);
+						
+						this.transitionTo(new FDJ.Views.PlayerView({ model: this.model.get('facebookProxy') }));
 					}else{
-						this.transitionTo(this.loginView);
+						this.transitionTo(new FDJ.Views.LoginView({ model: this.model.get('facebookProxy') } ));
 					}
 					
 				},
 				
 				transitionTo:function(view){
-					
+				
 					var obj = this.$el;
 					var t = this;
+					
 					obj.fadeOut(500, function() {
 						//console.log($el);
 						obj.html("");
-					    obj.append(view);
+					    obj.append(view.$el);
 						obj.fadeIn(500, function() {
 							//TO DO!! change this to media queries...getto hack for now
-							t.$('#container-songs').attr('style', 'margin-top:' + t.$('#header').height() + "px");
-							console.log( t.$('#header').height());
+							t.$('#wrapper').attr('style', 'margin-top:' + t.$('#header').height() + "px");
+							view.reInit();
+							//view.reInit();
 						});
 					});
 					
@@ -265,23 +304,36 @@ var FDJ = {
 				
 				el:$("#debugpanel"),
 				
+				
 				events:{
 					"click #debug-login-button": "doDebugLogin",
-					"click #debug-logout-button": "doDebugLogout"
+					"click #debug-logout-button": "doDebugLogout",
+					"click #debug-add-song": "doDebugAddSong"
 				},
 				initialize:function(){
+				
 					console.log("Debug Panel Initialized");
 				},
 				doDebugLogin:function(){
+					event.preventDefault();
 					this.model.get('facebookProxy').doLogin();
 					console.log("doDebugLogin");
 				},
 				
 				doDebugLogout:function(){
+					event.preventDefault();
 					this.model.get('facebookProxy').doLogout();
 					console.log("doDebugLogout");
-				}
+				},
+
+				doDebugAddSong:function(){
+					event.preventDefault();
 				
+		   			window.view.playerView.addSong();
+			
+					console.log("deDebugAddSong");
+				}
+			
 
 
 				
