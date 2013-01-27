@@ -294,9 +294,10 @@ var FDJ = {
 							console.log("hit interval");
 							if(!faded){
 								console.log("DO POP");
+								clearInterval(popInterval);
 							}
 							
-							clearInterval(popInterval);
+							
 						},2000);
 						
 					
