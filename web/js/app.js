@@ -93,12 +93,30 @@ var FDJ = {
 
 				
 			});
+
+			this.Views.DebugPanel = Backbone.View.extend({
+				el:$("#debugpanel"),
+
+				events:{
+					"click #debug-login-button": "doDebugLogin"
+				},
+
+				doDebugLogin:function(){
+					console.log("doDebugLogin")
+				},
+
+
+				initialize:function(){
+
+				}
+			});
 		}
 	},
 
 	initApp:function(){
 		window.model = new FDJ.Models.MainModel();
 		window.view = new FDJ.Views.MainView({model:window.model});
+		window.debug = new FDJ.Views.DebugPanel({model:window.model});
 	}
 
 };
