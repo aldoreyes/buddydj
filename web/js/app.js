@@ -69,7 +69,7 @@ var FDJ = {
 			});
 
 			this.Views.LoginView = Backbone.View.extend({
-				className:"login",
+				className:"panel",
 				template: _.template($('#login-template').html()),
 
 				initialize:function(){

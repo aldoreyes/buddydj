@@ -7,10 +7,21 @@
 <link href="css/main.css" rel="stylesheet" media="screen">
 </head>
 <body>
-<div id="main">
+<div id="main-container">
+</div>
+<div class="panel" id="player">
+	this is the player div!
 </div>
 
-<div class="panel" id="home">
+<div id="debugpanel">
+	Debug Panel:
+	<br>
+	<a href="#" onClick="javascript:onUserLogin();">onUserLogin()</a>
+	<br>
+	<a href="#" onClick="javascript:onUserLogout();">onUserLogout()</a>
+<div> 
+
+<script type="text/template" id="login-template">
 	<div class="container-narrow">
 
 		<div class="masthead">
@@ -38,21 +49,13 @@
 	        </div>
 				</div>
 	</div>
-</div>
-<div class="panel" id="player">
-	this is the player div!
-</div>
-
-<div id="debugpanel">
-	Debug Panel:
-	<br>
-	<a href="#" onClick="javascript:onUserLogin();">onUserLogin()</a>
-	<br>
-	<a href="#" onClick="javascript:onUserLogout();">onUserLogout()</a>
-<div> 
+</script>
 
 	<script src="http://code.jquery.com/jquery-latest.js"></script>
 	<script src="js/bootstrap.min.js"></script>
-	<script src="js/main.js"></script>
+	<script src="js/libs/jquery.min.js"></script>
+	<script src="js/libs/underscore-min.js"></script>
+	<script src="js/libs/backbone-min.js"></script>
+	<script src="js/app.js"></script>
 </body>
 </html>
