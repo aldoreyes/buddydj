@@ -3,8 +3,9 @@ body {
   padding-bottom: 40px;
 }
 
-.panel{
-	
+.song{
+	width:200px;
+	height:150px;
 }
 
 #debugpanel{
@@ -13,11 +14,17 @@ body {
 	height:100px;
 	background-color:white;
 	z-index:9999;
-	left:100px;
+	left:500px;
 	top:150px;
 	border-style: solid;
 	border-width: 1px;
 	border-color:gray;
+}
+
+#container-songs{
+	position:relative;
+	margin: auto 0;
+
 }
 
 /* Custom container */

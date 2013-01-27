@@ -157,7 +157,10 @@ var FDJ = {
 				template: _.template($('#player-template').html()),
 
 				initialize:function(){
+					
 					this.render();
+					
+					
 				},
 				
 				events:{
@@ -187,12 +190,9 @@ var FDJ = {
 					this.loginView = new FDJ.Views.LoginView({ model: this.model.get('facebookProxy') } ).$el;
 					this.playerView = new FDJ.Views.PlayerView({ model: this.model.get('facebookProxy') } ).$el;
 					
-		
-					
 					if(isLoggedIn){
 						this.transitionTo(this.playerView);
 					}
-					
 					
 					this.$el.append(new FDJ.Views.LoaderView().$el);
 					
@@ -201,11 +201,10 @@ var FDJ = {
 				
 				userLoginChange:function(){
 					var isLoggedIn = this.model.get('facebookProxy').get('isLoggedIn');
-					console.log(isLoggedIn);
+
 					if(isLoggedIn){
 						this.transitionTo(this.playerView);
 					}else{
-					
 						this.transitionTo(this.loginView);
 					}
 					
@@ -214,12 +213,16 @@ var FDJ = {
 				transitionTo:function(view){
 					
 					var obj = this.$el;
-					
+					var t = this;
 					obj.fadeOut(500, function() {
 						//console.log($el);
 						obj.html("");
 					    obj.append(view);
-						obj.fadeIn(500, function() {});
+						obj.fadeIn(500, function() {
+							//TO DO!! change this to media queries...getto hack for now
+							t.$('#container-songs').attr('style', 'margin-top:' + t.$('#header').height() + "px");
+							console.log( t.$('#header').height());
+						});
 					});
 					
 				}
@@ -236,8 +239,7 @@ var FDJ = {
 					"click #debug-logout-button": "doDebugLogout"
 				},
 				initialize:function(){
-				
-				console.log("hellow debug");	
+					console.log("Debug Panel Initialized");
 				},
 				doDebugLogin:function(){
 					this.model.get('facebookProxy').doLogin();

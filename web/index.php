@@ -50,8 +50,8 @@ Loader!
 </script>
 
 <script type="text/template" id="player-template">
-<div class="navbar navbar-inverse navbar-fixed-top">
-      <div class="navbar-inner">
+<div  class="navbar navbar-inverse navbar-fixed-top">
+      <div id="header" class="navbar-inner">
         <div class="container-fluid">
       
           <a class="brand" href="#">Facebook DJ</a>
@@ -70,7 +70,12 @@ Loader!
         </div>
       </div>
  </div>
-
+<div id="container-songs">	
+	<div class="hero-unit song">
+	        <p>This is a song</p>
+	        <p><a class="btn btn-primary btn-large">Learn more »</a></p>
+	</div>
+</div>
 <div class="navbar navbar-inverse navbar-fixed-bottom">
       <div class="navbar-inner">
         <div class="container-fluid">
