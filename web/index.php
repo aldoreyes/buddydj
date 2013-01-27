@@ -7,20 +7,10 @@
 <link href="css/main.css" rel="stylesheet" media="screen">
 </head>
 <body>
-<div id="main-container">
-</div>
-<div class="panel" id="player">
-	this is the player div!
-</div>
-
-<div id="debugpanel">
-	Debug Panel: Change!! my Feature!
-	<br>
-	<a id="debug-login-button" href="#">onUserLogin()</a>
-	<br>
-	<a href="#" onClick="javascript:onUserLogout();">onUserLogout()</a>
-<div> 
-
+<div id="main-container"></div>
+<script type="text/template" id="loader-template">
+Loader!
+</script>
 <script type="text/template" id="login-template">
 	<div class="container-narrow">
 
@@ -49,6 +39,49 @@
 	        </div>
 				</div>
 	</div>
+</script>
+
+<script type="text/template" id="player-template">
+<div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid">
+      
+          <a class="brand" href="#">Facebook DJ</a>
+          <div class="nav-collapse collapse">
+            <p class="navbar-text pull-right">
+              Hello Facebook User! <button class="btn btn-mini" type="button">Log Out</button>
+            </p>
+          </div><!--/.nav-collapse -->
+					<div class="nav-collapse collapse">
+            <p class="navbar-text">
+              <p class="pull-left text-warning"><img src="https://fbcdn-profile-a.akamaihd.net/hprofile-ak-snc6/275957_7000452_1026323116_q.jpg" width="25" height="25"/>Currently playing: Whatever by Foo Fighter</p>
+							<p class="pull-left text-warning"><button class="btn btn-mini" type="button">Play</button><button class="btn btn-mini" type="button">Stop</button><button class="btn btn-mini" type="button">Skip</button></p>
+            </p>
+          </div><!--/.nav-collapse -->
+    		
+        </div>
+      </div>
+ </div>
+
+<div class="navbar navbar-inverse navbar-fixed-bottom">
+      <div class="navbar-inner">
+        <div class="container-fluid">
+          
+          <div class="nav-collapse collapse">
+            <p class="navbar-text pull-right">
+              Made by Aldinho y Messias
+            </p>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+</script>
+<script type="text/template" id="debug-template">
+		Debug Panel: 2
+		<br>
+		<a id="debug-login-button" href="#">onUserLogin()</a>
+		<br>
+		<a href="#" onClick="javascript:onUserLogout();">onUserLogout()</a>
 </script>
 
 	<script src="http://code.jquery.com/jquery-latest.js"></script>

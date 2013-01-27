@@ -67,10 +67,39 @@ var FDJ = {
 			this.Views.MainQueue = Backbone.View.extend({
 
 			});
+			
+			this.Views.LoaderView = Backbone.View.extend({
+				id:"loader",
+				template: _.template($('#loader-template').html()),
+
+				initialize:function(){
+					this.render();
+				},
+
+				render:function(){
+					this.$el.html(this.template());
+					return this;
+				}
+			});
+			
 
 			this.Views.LoginView = Backbone.View.extend({
 				className:"panel",
 				template: _.template($('#login-template').html()),
+
+				initialize:function(){
+					this.render();
+				},
+
+				render:function(){
+					this.$el.html(this.template());
+					return this;
+				}
+			});
+			
+			this.Views.PlayerView = Backbone.View.extend({
+				id:"player",
+				template: _.template($('#player-template').html()),
 
 				initialize:function(){
 					this.render();
@@ -86,28 +115,61 @@ var FDJ = {
 				el:$("#main-container"),
 
 				initialize:function(){
-					console.log(this.$el);
+					//console.log(this.$el);
+					//this.listenTo(this.model('facebookProxy', 'change:isLoggedIn', yourfunction)
 					this.model.get('facebookProxy').loadJDKAndInit();
-					this.$el.append(new FDJ.Views.LoginView().$el);
+					var isLoggedIn = this.model.get('facebookProxy').get('isLoggedIn');
+					
+					var loaderView = new FDJ.Views.LoaderView().$el;
+					var loginView = new FDJ.Views.LoginView().$el;
+					var playerView = new FDJ.Views.PlayerView().$el;
+					var debugView = new FDJ.Views.DebugPanel().$el;
+					
+					if(isLoggedIn){
+						this.transitionTo(playerView);
+					}
+					
+					this.$el.append(new FDJ.Views.LoaderView().$el);
+					this.$el.append(new FDJ.Views.DebugPanel().$el);
+				
 				},
+				
+				transitionTo:function(view){
+					//console.log("transtition" + $el);
+					var obj = this.$el;
+					
+					obj.fadeOut(500, function() {
+						//console.log($el);
+						obj.html("");
+					    obj.append(view);
+						obj.fadeIn(500, function() {});
+					});
+					
+				}
 
 				
 			});
 
 			this.Views.DebugPanel = Backbone.View.extend({
-				el:$("#debugpanel"),
+				id:"debugpanel",
+				template: _.template($('#debug-template').html()),
 
 				events:{
 					"click #debug-login-button": "doDebugLogin"
 				},
 
 				doDebugLogin:function(){
-					console.log("doDebugLogin")
+					console.log("doDebugLogin");
 				},
 
 
 				initialize:function(){
+					this.render();
+				},
 
+				render:function(){
+					this.$el.html(this.template());
+					return this;
 				}
 			});
 		}
@@ -117,7 +179,9 @@ var FDJ = {
 		window.model = new FDJ.Models.MainModel();
 		window.view = new FDJ.Views.MainView({model:window.model});
 		window.debug = new FDJ.Views.DebugPanel({model:window.model});
-	}
+	},
+	
+
 
 };
 
