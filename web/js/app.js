@@ -292,6 +292,7 @@ var FDJ = {
 					
 					var popInterval =	setInterval(function(){
 							console.log("hit interval");
+							console.log(faded);
 							if(!faded){
 								console.log("DO POP");
 								clearInterval(popInterval);
