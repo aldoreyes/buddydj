@@ -14,7 +14,7 @@
 </div>
 
 <div id="debugpanel">
-	Debug Panel:
+	Debug Panel: Change!! my Feature!
 	<br>
 	<a id="debug-login-button" href="#">onUserLogin()</a>
 	<br>
