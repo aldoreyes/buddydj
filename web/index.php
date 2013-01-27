@@ -7,10 +7,21 @@
 <link href="css/main.css" rel="stylesheet" media="screen">
 </head>
 <body>
-<div id="main">
+<div id="main-container">
+</div>
+<div class="panel" id="player">
+	this is the player div!
 </div>
 
-<div class="panel" id="home">
+<div id="debugpanel">
+	Debug Panel:
+	<br>
+	<a href="#" onClick="javascript:onUserLogin();">onUserLogin()</a>
+	<br>
+	<a href="#" onClick="javascript:onUserLogout();">onUserLogout()</a>
+<div> 
+
+<script type="text/template" id="login-template">
 	<div class="container-narrow">
 
 		<div class="masthead">
@@ -38,53 +49,13 @@
 	        </div>
 				</div>
 	</div>
-</div>
-<div class="panel" id="player">
-	<div class="navbar navbar-inverse navbar-fixed-top">
-	      <div class="navbar-inner">
-	        <div class="container-fluid">
-	      
-	          <a class="brand" href="#">Facebook DJ</a>
-	          <div class="nav-collapse collapse">
-	            <p class="navbar-text pull-right">
-	              Hello Facebook User! <button class="btn btn-mini" type="button">Log Out</button>
-	            </p>
-	          </div><!--/.nav-collapse -->
-						<div class="nav-collapse collapse">
-	            <p class="navbar-text">
-	              <p class="pull-left text-warning"><img src="https://fbcdn-profile-a.akamaihd.net/hprofile-ak-snc6/275957_7000452_1026323116_q.jpg" width="25" height="25"/>Currently playing: Whatever by Foo Fighter</p>
-								<p class="pull-left text-warning"><button class="btn btn-mini" type="button">Play</button><button class="btn btn-mini" type="button">Stop</button><button class="btn btn-mini" type="button">Skip</button></p>
-	            </p>
-	          </div><!--/.nav-collapse -->
-	    		
-	        </div>
-	      </div>
-	 </div>
-	
-	<div class="navbar navbar-inverse navbar-fixed-bottom">
-	      <div class="navbar-inner">
-	        <div class="container-fluid">
-	          
-	          <div class="nav-collapse collapse">
-	            <p class="navbar-text pull-right">
-	              Made by Aldinho y Messias
-	            </p>
-	          </div><!--/.nav-collapse -->
-	        </div>
-	      </div>
-	    </div>
-</div>
-
-<div id="debugpanel">
-	Debug Panel:
-	<br>
-	<a href="#" onClick="javascript:onUserLogin();">onUserLogin()</a>
-	<br>
-	<a href="#" onClick="javascript:onUserLogout();">onUserLogout()</a>
-<div> 
+</script>
 
 	<script src="http://code.jquery.com/jquery-latest.js"></script>
 	<script src="js/bootstrap.min.js"></script>
-	<script src="js/main.js"></script>
+	<script src="js/libs/jquery.min.js"></script>
+	<script src="js/libs/underscore-min.js"></script>
+	<script src="js/libs/backbone-min.js"></script>
+	<script src="js/app.js"></script>
 </body>
 </html>
