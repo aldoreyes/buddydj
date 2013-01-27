@@ -258,9 +258,9 @@ var FDJ = {
 					this.model.get('facebookProxy').loadJDKAndInit();
 					var isLoggedIn = this.model.get('facebookProxy').get('isLoggedIn');
 				
-					this.loaderView = new FDJ.Views.LoaderView();
-					this.loginView = new FDJ.Views.LoginView({ model: this.model.get('facebookProxy') } );
-					this.playerView = new FDJ.Views.PlayerView({ model: this.model.get('facebookProxy') } );
+					//this.loaderView = new FDJ.Views.LoaderView();
+					//this.loginView = new FDJ.Views.LoginView({ model: this.model.get('facebookProxy') } );
+					//this.playerView = new FDJ.Views.PlayerView({ model: this.model.get('facebookProxy') } );
 					
 					if(isLoggedIn){
 						this.transitionTo(new FDJ.Views.PlayerView({ model: this.model.get('facebookProxy') } ));
@@ -284,7 +284,7 @@ var FDJ = {
 				},
 				
 				transitionTo:function(view){
-				
+					console.log("Transitioning");
 					var obj = this.$el;
 					var t = this;
 					
