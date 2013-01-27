@@ -289,11 +289,12 @@ var FDJ = {
 					var obj = this.$el;
 					var t = this;
 				
-					console.log(obj);
-					console.log("html treatment");
+				
+					console.log("html 222");
 					 obj.fadeTo(500, 0,function(){
-							obj.html(view.$el);
 							console.log("finished dimming down");
+							obj.html(view.$el);
+						
 					        obj.fadeTo(500,1,function(){
 								console.log("finished dimming UP");
 								//TO DO!! change this to media queries...getto hack for now
