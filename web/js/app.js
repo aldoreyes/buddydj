@@ -290,11 +290,11 @@ var FDJ = {
 					var t = this;
 				
 					console.log(obj);
-						
+					console.log("html treatment");
 					 obj.fadeTo(500, 0,function(){
-							obj.empty();
+							obj.html(view.$el);
 							
-					        obj.append(view.$el).fadeTo(500,1,function(){
+					        obj.fadeTo(500,1,function(){
 								//TO DO!! change this to media queries...getto hack for now
 								t.$('#wrapper').attr('style', 'margin-top:' + t.$('#header').height() + "px");
 								view.reInit();
