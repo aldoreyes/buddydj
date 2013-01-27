@@ -16,7 +16,7 @@
 <div id="debugpanel">
 	Debug Panel:
 	<br>
-	<a href="#" onClick="javascript:onUserLogin();">onUserLogin()</a>
+	<a id="debug-login-button" href="#">onUserLogin()</a>
 	<br>
 	<a href="#" onClick="javascript:onUserLogout();">onUserLogout()</a>
 <div> 
