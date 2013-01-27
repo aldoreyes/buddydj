@@ -103,9 +103,7 @@ Loader!
 						        <p>This is a song3</p>
 						        <p><a class="btn btn-primary btn-large">Learn more »</a></p>
 						</div>
-		<script>
 
-	  </script>
 	</div>
 </div>
 <div class="navbar navbar-inverse navbar-fixed-bottom">
