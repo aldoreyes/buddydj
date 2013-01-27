@@ -1,4 +1,4 @@
-var isLoggedIn = false; //temporary
+var isLoggedIn = true; //temporary
 var home = null;
 var player = null;
 
