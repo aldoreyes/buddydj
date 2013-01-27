@@ -284,7 +284,9 @@ var FDJ = {
 				},
 				
 				transitionTo:function(view){
-					console.log("Transitioning");
+					console.log(view);
+					console.log(this.$el);
+					console.log(this);
 					var obj = this.$el;
 					var t = this;
 					
