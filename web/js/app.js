@@ -288,14 +288,17 @@ var FDJ = {
 					
 					var obj = this.$el;
 					var t = this;
+					var faded = false;
 				
-				
-					console.log("html 222");
+					
+					console.log("html 2223");
 					 obj.fadeTo(500, 0,function(){
 							console.log("finished dimming down");
 							obj.html(view.$el);
-						
+							console.log(faded);
+							faded = true;
 					        obj.fadeTo(500,1,function(){
+						console.log(faded);
 								console.log("finished dimming UP");
 								//TO DO!! change this to media queries...getto hack for now
 								t.$('#wrapper').attr('style', 'margin-top:' + t.$('#header').height() + "px");
@@ -304,6 +307,15 @@ var FDJ = {
 						
 							});
 					    });	
+					
+					 var popInterval =	setInterval(function(){
+						
+							if(!faded){
+								console.log("DO POP");
+							}
+							
+							clearInterval(popInterval);
+						},2000);
 						
 					/*
 					obj.fadeOut(500, function() {
