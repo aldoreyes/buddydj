@@ -68,15 +68,19 @@ var FDJ = {
 				
 
 				loginStatus:function(response){
+					console.log("Got FB Status");
 					if (response.status === 'connected') {
 					    // connected
+					    console.log("Got FB isConnected");
 					    this.set('isLoggedIn', true);
 					    this.getLastSongs();
 					  } else if (response.status === 'not_authorized') {
+						console.log("Got FB not authorized");
 						this.set('isLoggedIn', false);
 					    // not_authorized
 					    //this.doLogin();
 					  } else {
+						console.log("Got FB loggedout");
 						this.set('isLoggedIn', false);
 					    // not_logged_in
 					    //this.doLogin();
