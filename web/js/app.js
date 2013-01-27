@@ -181,18 +181,17 @@ var FDJ = {
 					this.listenTo(this.model.get('facebookProxy'), 'change:isLoggedIn', this.userLoginChange);
 					this.model.get('facebookProxy').loadJDKAndInit();
 					var isLoggedIn = this.model.get('facebookProxy').get('isLoggedIn');
-					console.log(isLoggedIn);
-					var loaderView = new FDJ.Views.LoaderView().$el;
-					var loginView = new FDJ.Views.LoginView({ model: this.model.get('facebookProxy') } ).$el;
-					var playerView = new FDJ.Views.PlayerView().$el;
-					var debugView = new FDJ.Views.DebugPanel().$el;
-					/*
+
+					this.loaderView = new FDJ.Views.LoaderView().$el;
+					this.loginView = new FDJ.Views.LoginView({ model: this.model.get('facebookProxy') } ).$el;
+					this.playerView = new FDJ.Views.PlayerView().$el;
+					this.debugView = new FDJ.Views.DebugPanel().$el;
+				
+					
 					if(isLoggedIn){
-						this.transitionTo(playerView);
-					}else{
-						this.transitionTo(loginView);
+						this.transitionTo(this.playerView);
 					}
-					*/
+					
 					
 					this.$el.append(new FDJ.Views.LoaderView().$el);
 					this.$el.append(new FDJ.Views.DebugPanel().$el);
@@ -201,17 +200,18 @@ var FDJ = {
 				
 				userLoginChange:function(){
 					var isLoggedIn = this.model.get('facebookProxy').get('isLoggedIn');
-					console.log(isLoggedIn);
+				
 					if(isLoggedIn){
 						this.transitionTo(this.playerView);
 					}else{
+					
 						this.transitionTo(this.loginView);
 					}
 					
 				},
 				
 				transitionTo:function(view){
-					//console.log("transtition" + $el);
+					
 					var obj = this.$el;
 					
 					obj.fadeOut(500, function() {
