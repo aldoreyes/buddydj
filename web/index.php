@@ -103,7 +103,6 @@ Loader!
 						        <p>This is a song3</p>
 						        <p><a class="btn btn-primary btn-large">Learn more »</a></p>
 						</div>
-
 	</div>
 </div>
 <div class="navbar navbar-inverse navbar-fixed-bottom">
@@ -112,7 +111,7 @@ Loader!
           
           <div class="nav-collapse collapse">
             <p class="navbar-text pull-right">
-              Made by Aldinho y Messias
+              Made by Aldo & Matias
             </p>
           </div><!--/.nav-collapse -->
         </div>
