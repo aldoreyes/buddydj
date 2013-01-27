@@ -284,20 +284,30 @@ var FDJ = {
 				},
 				
 				transitionTo:function(view){
-					console.log(view);
-					console.log(this.$el);
-					console.log(this);
+					//console.log(view.$el.html());
+					
 					var obj = this.$el;
 					var t = this;
-					obj.html("");
-					obj.append(view.$el);
-						t.$('#wrapper').attr('style', 'margin-top:' + t.$('#header').height() + "px");
-						view.reInit();
+				
+					console.log(obj);
+						
+					 obj.fadeTo(500, 0,function(){
+							obj.empty();
+							obj.append(view.$el);
+					        obj.fadeTo(500,1,function(){
+								//TO DO!! change this to media queries...getto hack for now
+								t.$('#wrapper').attr('style', 'margin-top:' + t.$('#header').height() + "px");
+								view.reInit();
+								
+						
+							});
+					    });	
+						
 					/*
 					obj.fadeOut(500, function() {
 						//console.log($el);
 						obj.html("");
-					    	obj.append(view.$el);
+					    obj.append(view.$el);
 						obj.fadeIn(500, function() {
 							//TO DO!! change this to media queries...getto hack for now
 							t.$('#wrapper').attr('style', 'margin-top:' + t.$('#header').height() + "px");
