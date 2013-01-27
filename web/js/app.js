@@ -68,6 +68,11 @@ var FDJ = {
 				doLogin:function(){
 					FB.login($.proxy(this.onFBLogin, this));
 				},
+				
+				doLogout:function(){
+					FB.logout();
+					this.set('isLoggedIn', false);
+				},
 
 				onFBLogin:function(response){
 					if (response.authResponse) {
@@ -154,6 +159,14 @@ var FDJ = {
 				initialize:function(){
 					this.render();
 				},
+				
+				events:{
+					"click #fbLogoutButton": "doLogout"
+				},
+				
+				doLogout:function(){
+					this.model.doLogout();
+				},
 
 				render:function(){
 					this.$el.html(this.template());
@@ -172,8 +185,8 @@ var FDJ = {
 				
 					this.loaderView = new FDJ.Views.LoaderView().$el;
 					this.loginView = new FDJ.Views.LoginView({ model: this.model.get('facebookProxy') } ).$el;
-					this.playerView = new FDJ.Views.PlayerView().$el;
-					this.debugView = new FDJ.Views.DebugPanel().$el;
+					this.playerView = new FDJ.Views.PlayerView({ model: this.model.get('facebookProxy') } ).$el;
+					
 		
 					
 					if(isLoggedIn){
@@ -182,13 +195,13 @@ var FDJ = {
 					
 					
 					this.$el.append(new FDJ.Views.LoaderView().$el);
-					this.$el.append(new FDJ.Views.DebugPanel().$el);
+					
 				
 				},
 				
 				userLoginChange:function(){
 					var isLoggedIn = this.model.get('facebookProxy').get('isLoggedIn');
-				
+					console.log(isLoggedIn);
 					if(isLoggedIn){
 						this.transitionTo(this.playerView);
 					}else{
@@ -215,26 +228,30 @@ var FDJ = {
 			});
 
 			this.Views.DebugPanel = Backbone.View.extend({
-				id:"debugpanel",
-				template: _.template($('#debug-template').html()),
-
+				
+				el:$("#debugpanel"),
+				
 				events:{
-					"click #debug-login-button": "doDebugLogin"
+					"click #debug-login-button": "doDebugLogin",
+					"click #debug-logout-button": "doDebugLogout"
 				},
-
+				initialize:function(){
+				
+				console.log("hellow debug");	
+				},
 				doDebugLogin:function(){
+					this.model.get('facebookProxy').doLogin();
 					console.log("doDebugLogin");
 				},
-
-
-				initialize:function(){
-					this.render();
-				},
-
-				render:function(){
-					this.$el.html(this.template());
-					return this;
+				
+				doDebugLogout:function(){
+					this.model.get('facebookProxy').doLogout();
+					console.log("doDebugLogout");
 				}
+				
+
+
+				
 			});
 		}
 	},

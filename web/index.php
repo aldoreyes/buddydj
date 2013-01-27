@@ -8,6 +8,14 @@
 </head>
 <body>
 <div id="main-container"></div>
+<div id="debugpanel">
+	Debug Panel: 2
+	<br>
+	<a id="debug-login-button" href="#">User Login</a>
+	<br>
+	<a id="debug-logout-button" href="#">User Logout</a>
+</div>
+
 <script type="text/template" id="loader-template">
 Loader!
 </script>
@@ -49,7 +57,7 @@ Loader!
           <a class="brand" href="#">Facebook DJ</a>
           <div class="nav-collapse collapse">
             <p class="navbar-text pull-right">
-              Hello Facebook User! <button class="btn btn-mini" type="button">Log Out</button>
+              Hello Facebook User! <button class="btn btn-mini" type="button" id="fbLogoutButton">Log Out</button>
             </p>
           </div><!--/.nav-collapse -->
 					<div class="nav-collapse collapse">
@@ -76,13 +84,7 @@ Loader!
       </div>
     </div>
 </script>
-<script type="text/template" id="debug-template">
-		Debug Panel: 2
-		<br>
-		<a id="debug-login-button" href="#">onUserLogin()</a>
-		<br>
-		<a href="#" onClick="javascript:onUserLogout();">onUserLogout()</a>
-</script>
+
 
 	<script src="http://code.jquery.com/jquery-latest.js"></script>
 	<script src="js/bootstrap.min.js"></script>
