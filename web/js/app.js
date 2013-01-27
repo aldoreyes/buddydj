@@ -74,6 +74,16 @@ var FDJ = {
 			        } else {
 			            // cancelled
 			        }
+				},
+
+				getLastSongs:function(){
+					FB.api('/me?fields=friends.fields(music.listens.limit(5))', $.proxy(this.onLastSongs, this));
+
+				},
+
+				onLastSongs:function(response){
+					//response.friends.data
+					//this.set('last_songs', )
 				}
 			});
 
