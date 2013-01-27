@@ -55,9 +55,11 @@ var FDJ = {
 					    // connected
 					    this.set('isLoggedIn', true);
 					  } else if (response.status === 'not_authorized') {
+						this.set('isLoggedIn', false);
 					    // not_authorized
 					    //this.doLogin();
 					  } else {
+						this.set('isLoggedIn', false);
 					    // not_logged_in
 					    //this.doLogin();
 					  }
@@ -77,27 +79,13 @@ var FDJ = {
 				},
 
 				getLastSongs:function(){
-					FB.api('me?fields=friends.fields(music.listens.fields(id, from, publish_time, application, data).limit(5))', $.proxy(this.onLastSongs, this));
+					FB.api('/me?fields=friends.fields(music.listens.limit(5))', $.proxy(this.onLastSongs, this));
 
 				},
 
 				onLastSongs:function(response){
-					var friends = response.friends.data;
-					var l_friends = friends.length;
-					var last_songs = [];
-
-					var l_songs = 0;
-					var friends_songs = null;
-					for (var i = l_friends - 1; i >= 0; i--) {
-
-						friends_songs =friends[i]["music.listens"]?friends[i]["music.listens"].data:null;
-						if(!friends_songs){continue;} // break if no songs
-						l_songs = friends_songs.length;
-						for (var j = 0; j < l_songs; j++) {
-							last_songs.push(friends_songs[j]);
-						};
-					}
-					this.set('last_songs', _.sortBy(last_songs, 'id'));
+					//response.friends.data
+					//this.set('last_songs', )
 				}
 			});
 
@@ -181,12 +169,12 @@ var FDJ = {
 					this.listenTo(this.model.get('facebookProxy'), 'change:isLoggedIn', this.userLoginChange);
 					this.model.get('facebookProxy').loadJDKAndInit();
 					var isLoggedIn = this.model.get('facebookProxy').get('isLoggedIn');
-
+				
 					this.loaderView = new FDJ.Views.LoaderView().$el;
 					this.loginView = new FDJ.Views.LoginView({ model: this.model.get('facebookProxy') } ).$el;
 					this.playerView = new FDJ.Views.PlayerView().$el;
 					this.debugView = new FDJ.Views.DebugPanel().$el;
-				
+		
 					
 					if(isLoggedIn){
 						this.transitionTo(this.playerView);
