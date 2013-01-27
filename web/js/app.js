@@ -82,8 +82,22 @@ var FDJ = {
 				},
 
 				onLastSongs:function(response){
-					//response.friends.data
-					//this.set('last_songs', )
+					var friends = response.friends.data;
+					var l_friends = friends.length;
+					var last_songs = [];
+
+					var l_songs = 0;
+					var friends_songs = null;
+					for (var i = l_friends - 1; i >= 0; i--) {
+
+						friends_songs =friends[i]["music.listens"]?friends[i]["music.listens"].data:null;
+						if(!friends_songs){continue;} // break if no songs
+						l_songs = friends_songs.length;
+						for (var j = 0; j < l_songs; j++) {
+							last_songs.push(friends_songs[j]);
+						};
+					}
+					this.set('last_songs', _.sortBy(last_songs, 'id'));
 				}
 			});
 
@@ -124,7 +138,6 @@ var FDJ = {
 				el:$("#main-container"),
 
 				initialize:function(){
-					console.log(this.$el);
 					this.model.get('facebookProxy').loadJDKAndInit();
 					this.$el.append(new FDJ.Views.LoginView().$el);
 				},
