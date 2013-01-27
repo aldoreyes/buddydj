@@ -18,6 +18,20 @@ var FDJ = {
 			this.Models.MainModel = Backbone.Model.extend({
 				initialize:function(){
 					this.set('facebookProxy', new FDJ.Models.FacebookProxy({app_id:'480004502036911', channel:'/channel.php'}));
+					this.listenTo(this.get('facebookProxy'), 'change:last_songs', this.onLastSongsChange);
+					this.set('current_queue', new FDJ.Collections.Queue());
+					this.get('current_queue').comparator = this.DCSortBy;
+				},
+
+				onLastSongsChange:function(){
+					this.get('current_queue').update(this.get('facebookProxy').get('last_songs').models, {remove:false});
+					_.each(this.get('current_queue'), function(){
+						var d = arguments[2].at(arguments[1]).get('publish_time');
+					});
+				},
+
+				DCSortBy:function(song){
+					return -Date.parse(song.get('publish_time'));
 				}
 			});
 
@@ -50,10 +64,13 @@ var FDJ = {
 				    this.trigger('init');
 				},
 
+				
+
 				loginStatus:function(response){
 					if (response.status === 'connected') {
 					    // connected
 					    this.set('isLoggedIn', true);
+					    this.getLastSongs();
 					  } else if (response.status === 'not_authorized') {
 						this.set('isLoggedIn', false);
 					    // not_authorized
@@ -78,20 +95,34 @@ var FDJ = {
 					if (response.authResponse) {
 			            // connected
 			            this.set('isLoggedIn', true);
+			            this.getLastSongs();
 			        } else {
 			            // cancelled
 			        }
 				},
 
 				getLastSongs:function(){
-					FB.api('/me?fields=friends.fields(music.listens.limit(5))', $.proxy(this.onLastSongs, this));
+					FB.api('/me?fields=friends.fields(music.listens.fields(id, from, publish_time, application, data).limit(5))', $.proxy(this.onLastSongs, this));
 
 				},
 
 				onLastSongs:function(response){
-					//response.friends.data
-					//this.set('last_songs', )
-				}
+					var friends = response.friends.data;
+					var l_friends = friends.length;
+					var last_songs = [];
+
+					var l_songs = 0;
+					var friends_songs = null;
+					for (var i = l_friends - 1; i >= 0; i--) {
+						friends_songs =friends[i]["music.listens"]?friends[i]["music.listens"].data:null;
+						if(!friends_songs){continue;} // break if no songs
+						l_songs = friends_songs.length;
+						for (var j = 0; j < l_songs; j++) {
+							last_songs.push(friends_songs[j]);
+						};
+					}
+					this.set('last_songs', new FDJ.Collections.Queue(last_songs));
+				}				
 			});
 
 			this.Models.Song = Backbone.Model.extend({
@@ -103,7 +134,7 @@ var FDJ = {
 			*** COLLECTIONS
 			******************/
 			this.Collections.Queue = Backbone.Collection.extend({
-				model:this.Models.Song
+				model:FDJ.Models.Song
 			});
 
 			/*****************
