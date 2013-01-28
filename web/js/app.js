@@ -215,9 +215,8 @@ var FDJ = {
 				template: _.template($('#player-template').html()),
 
 				initialize:function(){
-					//this.listenTo(this.model.get('current_queue'), 'add', this.addSong);
-					this.listenTo(this.model, 'change:last_songs', this.addSong('fff'));
-					console.log(this.model);
+					this.listenTo(this.model.get('current_queue'), 'add', this.addSong);
+				
 					this.render();
 					
 					
@@ -228,8 +227,7 @@ var FDJ = {
 				},
 				
 				addSong:function(grr){
-					console.log("whaa");
-					console.log(grr);
+					console.log("add song");
 					var $container = $('#container');
 					var newElement = '<div class="song" data-symbol="3"><p>This is a song3</p><p><a class="btn btn-primary btn-large">Learn more »</a></p></div>';	
 		        	var $newEls = $( newElement);
@@ -239,7 +237,7 @@ var FDJ = {
 				},
 				
 				doLogout:function(){
-					this.model.doLogout();
+					this.model.get("facebookProxy").doLogout();
 				},
 				
 				reInit:function(){
@@ -279,7 +277,7 @@ var FDJ = {
 					//this.playerView = new FDJ.Views.PlayerView({ model: this.model.get('facebookProxy') } );
 					
 					if(isLoggedIn){
-						this.transitionTo(new FDJ.Views.PlayerView({ model: this.model.get('facebookProxy') } ));
+						this.transitionTo(new FDJ.Views.PlayerView({ model: this.model } ));
 					}
 					
 					this.$el.append(new FDJ.Views.LoaderView().$el);
@@ -292,7 +290,7 @@ var FDJ = {
 
 					if(isLoggedIn){
 						
-						this.transitionTo(new FDJ.Views.PlayerView({ model: this.model.get('facebookProxy') }));
+						this.transitionTo(new FDJ.Views.PlayerView({ model: this.model}));
 					}else{
 						this.transitionTo(new FDJ.Views.LoginView({ model: this.model.get('facebookProxy') } ));
 					}

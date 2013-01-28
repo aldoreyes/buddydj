@@ -74,36 +74,7 @@ Loader!
  </div>
 
 <div id="wrapper">
-<div id="container" class="clearfix">	
-		<div class="song" data-symbol="1">
-		        <p>This is a song1</p>
-		        <p><a class="btn btn-primary btn-large">Learn more »</a></p>
-		</div>
-		<div class="song" data-symbol="4">
-		        <p>This is a song4</p>
-		        <p><a class="btn btn-primary btn-large">Learn more »</a></p>
-		</div>
-		<div class="song" data-symbol="3">
-		        <p>This is a song3</p>
-		        <p><a class="btn btn-primary btn-large">Learn more »</a></p>
-		</div>
-			<div class="song" data-symbol="3">
-			        <p>This is a song3</p>
-			        <p><a class="btn btn-primary btn-large">Learn more »</a></p>
-			</div>
-				<div class="song" data-symbol="3">
-				        <p>This is a song3</p>
-				        <p><a class="btn btn-primary btn-large">Learn more »</a></p>
-				</div>
-					<div class="song" data-symbol="3">
-					        <p>This is a song3</p>
-					        <p><a class="btn btn-primary btn-large">Learn more »</a></p>
-					</div>
-						<div class="song" data-symbol="3">
-						        <p>This is a song3</p>
-						        <p><a class="btn btn-primary btn-large">Learn more »</a></p>
-						</div>
-	</div>
+	<div id="container" class="clearfix"></div>
 </div>
 <div class="navbar navbar-inverse navbar-fixed-bottom">
       <div class="navbar-inner">
