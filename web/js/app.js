@@ -85,7 +85,7 @@ var FDJ = {
 				},
 
 				doLogin:function(){
-					FB.login($.proxy(this.onFBLogin, this));
+					FB.login($.proxy(this.onFBLogin, this), {scope:'friends_actions.music'});
 				},
 				
 				doLogout:function(){
@@ -121,6 +121,7 @@ var FDJ = {
 				},
 
 				onLastSongs:function(response){
+					console.log("get songs");
 					var friends = response.friends.data;
 					var l_friends = friends.length;
 					var last_songs = [];
@@ -129,12 +130,14 @@ var FDJ = {
 					var friends_songs = null;
 					for (var i = l_friends - 1; i >= 0; i--) {
 						friends_songs =friends[i]["music.listens"]?friends[i]["music.listens"].data:null;
+					
 						if(!friends_songs){continue;} // break if no songs
 						l_songs = friends_songs.length;
 						for (var j = 0; j < l_songs; j++) {
 							last_songs.push(friends_songs[j]);
 						};
 					}
+					
 					this.set('last_songs', new FDJ.Collections.Queue(last_songs));
 				}				
 			});
@@ -212,7 +215,9 @@ var FDJ = {
 				template: _.template($('#player-template').html()),
 
 				initialize:function(){
-					console.log("player init");
+					//this.listenTo(this.model.get('current_queue'), 'add', this.addSong);
+					this.listenTo(this.model, 'change:last_songs', this.addSong('fff'));
+					console.log(this.model);
 					this.render();
 					
 					
@@ -222,7 +227,9 @@ var FDJ = {
 					"click #fbLogoutButton": "doLogout"
 				},
 				
-				addSong:function(){
+				addSong:function(grr){
+					console.log("whaa");
+					console.log(grr);
 					var $container = $('#container');
 					var newElement = '<div class="song" data-symbol="3"><p>This is a song3</p><p><a class="btn btn-primary btn-large">Learn more »</a></p></div>';	
 		        	var $newEls = $( newElement);
