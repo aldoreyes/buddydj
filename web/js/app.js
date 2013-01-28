@@ -212,9 +212,11 @@ var FDJ = {
 
 			this.Views.TileView = Backbone.View.extend({
 				template: _.template($('#tile-template').html()),
+				className: 'song',
 
 				render:function(){
 					this.$el.html(this.template(this.model.attributes));
+					this.$el.attr('data-symbol', this.model.get('publish_time'));
 					return this;
 				}
 			});
@@ -236,7 +238,7 @@ var FDJ = {
 				},
 				
 				addSong:function(grr){
-					
+					console.log("addSong", grr);
 					var $container = this.$('#container');
 					var newElement = new FDJ.Views.TileView({model:grr});
 		        	
