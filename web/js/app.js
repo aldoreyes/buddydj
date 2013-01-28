@@ -209,6 +209,17 @@ var FDJ = {
 					console.log("login re-init");
 				}
 			});
+
+			this.Views.TileView = Backbone.View.extend({
+				template: _.template($('#tile-template').html()),
+				className: 'song',
+
+				render:function(){
+					this.$el.html(this.template(this.model.attributes));
+					this.$el.attr('data-symbol', this.model.get('publish_time'));
+					return this;
+				}
+			});
 			
 			this.Views.PlayerView = Backbone.View.extend({
 				id:"player",
@@ -225,11 +236,11 @@ var FDJ = {
 				},
 				
 				addSong:function(grr){
-					console.log("add song");
-					var $container = $('#container');
-					var newElement = '<div class="song" data-symbol="3"><p>This is a song3</p><p><a class="btn btn-primary btn-large">Learn more »</a></p></div>';	
-		        	var $newEls = $( newElement);
-		        	$container.prepend( $newEls ).isotope('reloadItems').isotope({ sortBy: 'original-order' })
+					console.log("addSong", grr);
+					var $container = this.$('#container');
+					var newElement = new FDJ.Views.TileView({model:grr});
+		        	
+		        	$container.prepend( newElement.render().$el ).isotope('reloadItems').isotope({ sortBy: 'original-order' })
 		          	// set sort back to symbol for inserting
 		          	.isotope('option', { sortBy: 'symbol' });
 				},

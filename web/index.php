@@ -89,7 +89,11 @@ Loader!
       </div>
     </div>
 </script>
+<script type="text/template" id="tile-template">
+	<p><%= data.song.title  %></p>
+	<p><a class="btn btn-primary btn-large">Learn more »</a></p>
 
+</script>
 
 	<script src="http://code.jquery.com/jquery-latest.js"></script>
 	<script src="js/bootstrap.min.js"></script>
