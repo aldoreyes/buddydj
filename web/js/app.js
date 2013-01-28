@@ -68,6 +68,7 @@ var FDJ = {
 				
 
 				loginStatus:function(response){
+					console.log("Got FB Status");
 					if (response.status === 'connected') {
 					    // connected
 					    this.set('isLoggedIn', true);
@@ -103,7 +104,7 @@ var FDJ = {
 				},
 
 				getLastSongs:function(){
-					FB.api('/me?fields=friends.fields(music.listens.fields(id, from, publish_time, application, data).limit(5))', $.proxy(this.onLastSongs, this));
+					FB.api('/me?fields=friends.fields(music.listens.fields(id,from,publish_time,application,data).limit(5))', $.proxy(this.onLastSongs, this));
 
 				},
 
@@ -254,9 +255,9 @@ var FDJ = {
 					this.model.get('facebookProxy').loadJDKAndInit();
 					var isLoggedIn = this.model.get('facebookProxy').get('isLoggedIn');
 				
-					this.loaderView = new FDJ.Views.LoaderView();
-					this.loginView = new FDJ.Views.LoginView({ model: this.model.get('facebookProxy') } );
-					this.playerView = new FDJ.Views.PlayerView({ model: this.model.get('facebookProxy') } );
+					//this.loaderView = new FDJ.Views.LoaderView();
+					//this.loginView = new FDJ.Views.LoginView({ model: this.model.get('facebookProxy') } );
+					//this.playerView = new FDJ.Views.PlayerView({ model: this.model.get('facebookProxy') } );
 					
 					if(isLoggedIn){
 						this.transitionTo(new FDJ.Views.PlayerView({ model: this.model.get('facebookProxy') } ));
@@ -280,21 +281,33 @@ var FDJ = {
 				},
 				
 				transitionTo:function(view){
-				
+					//console.log(view.$el.html());
+					
 					var obj = this.$el;
 					var t = this;
+
+						
+					obj.html(view.$el);
+					t.$('#wrapper').attr('style', 'margin-top:' + t.$('#header').height() + "px");
+					view.reInit();
+					/*
+					 obj.fadeTo(500, 0,function(){
+							console.log("finished dimming down");
+							obj.html(view.$el);
+							faded = true;
+					        obj.fadeTo(500,1,function(){
+							
+							
+								console.log("finished dimming UP");
+								//TO DO!! change this to media queries...getto hack for now
+								t.$('#wrapper').attr('style', 'margin-top:' + t.$('#header').height() + "px");
+								view.reInit();
+								
+						
+							});
+					    });	
 					
-					obj.fadeOut(500, function() {
-						//console.log($el);
-						obj.html("");
-					    obj.append(view.$el);
-						obj.fadeIn(500, function() {
-							//TO DO!! change this to media queries...getto hack for now
-							t.$('#wrapper').attr('style', 'margin-top:' + t.$('#header').height() + "px");
-							view.reInit();
-							//view.reInit();
-						});
-					});
+					 */
 					
 				}
 
