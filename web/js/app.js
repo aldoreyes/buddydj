@@ -25,11 +25,7 @@ var FDJ = {
 				},
 
 				onLastSongsChange:function(){
-					console.log("onLastSongsChange");
 					this.get('current_queue').update(this.get('facebookProxy').get('last_songs').models, {remove:false});
-					_.each(this.get('current_queue'), function(){
-						var d = arguments[2].at(arguments[1]).get('publish_time');
-					});
 				},
 
 				DCSortBy:function(song){
