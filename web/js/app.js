@@ -36,6 +36,7 @@ var FDJ = {
 			this.Models.FacebookProxy = Backbone.Model.extend({
 				initialize:function(){
 					this.listenTo(this, 'change:isLoggedIn', this.onIsLoggedInChange);
+					this.set('fbUser', null);
 				},
 
 				loadJDKAndInit:function(){
@@ -73,6 +74,7 @@ var FDJ = {
 					if (response.status === 'connected') {
 					    // connected
 					    this.set('isLoggedIn', true);
+						this.getFBUser();
 					  } else if (response.status === 'not_authorized') {
 						this.set('isLoggedIn', false);
 					    // not_authorized
@@ -114,12 +116,23 @@ var FDJ = {
 					this.getLastSongs();
 					this.set('interval_songs', setInterval($.proxy(this.getLastSongs, this), 60*1000));
 				},
+				
+				getFBUser:function(){
+					FB.api('/me', $.proxy(this.onFBUser, this));
+				},
+				
+				onFBUser:function(response){
+					
+					
+					this.set('fbUser', response);
+				},
 
 				getLastSongs:function(){
 					FB.api('/me?fields=friends.fields(music.listens.fields(id,from,publish_time,application,data).limit(5))', $.proxy(this.onLastSongs, this));
 
 				},
-
+				
+				
 				onLastSongs:function(response){
 				
 					var friends = response.friends.data;
@@ -295,7 +308,7 @@ var FDJ = {
 				},
 
 				render:function(){
-					this.$el.html(this.template());
+					this.$el.html(this.template(this.model.attributes));
 					return this;
 				}
 			});

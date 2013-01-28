@@ -59,7 +59,7 @@ Loader!
           <a class="brand" href="#">Facebook DJ</a>
           <div class="nav-collapse collapse">
             <p class="navbar-text pull-right">
-              Hello Facebook User! <button class="btn btn-mini" type="button" id="fbLogoutButton">Log Out</button>
+              Hello ! <button class="btn btn-mini" type="button" id="fbLogoutButton">Log Out</button>
             </p>
           </div><!--/.nav-collapse -->
 					<div class="nav-collapse collapse">
