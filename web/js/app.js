@@ -236,7 +236,7 @@ var FDJ = {
 				},
 				
 				addSong:function(grr){
-					console.log("addSong", grr);
+					//console.log("addSong", grr);
 					var $container = this.$('#container');
 					var newElement = new FDJ.Views.TileView({model:grr});
 		        	
