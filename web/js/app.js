@@ -147,9 +147,11 @@ var FDJ = {
 					this.set('publish_time_mili', Date.parse(this.get('publish_time')));
 
 					//create artist homogenous property
+					
 					switch(this.get('application').name){
-					case "spotify":
-						this.set('artist', this.get('musician').title);
+					case "Spotify":
+						var musician = this.get('data').musician;
+						this.set('artist', musician?musician.title:"");
 						break;
 					case "Rdio":
 						var groups = this.constructor.rdioParse(this.get('data').song.url);
