@@ -26,9 +26,6 @@ var FDJ = {
 
 				onLastSongsChange:function(){
 					this.get('current_queue').update(this.get('facebookProxy').get('last_songs').models, {remove:false});
-					_.each(this.get('current_queue'), function(){
-						var d = arguments[2].at(arguments[1]).get('publish_time');
-					});
 				},
 
 				DCSortBy:function(song){
@@ -37,6 +34,10 @@ var FDJ = {
 			});
 
 			this.Models.FacebookProxy = Backbone.Model.extend({
+				initialize:function(){
+					this.listenTo(this, 'change:isLoggedIn', this.onIsLoggedInChange);
+				},
+
 				loadJDKAndInit:function(){
 					window.fbAsyncInit = $.proxy(this.init, this);
 
@@ -72,7 +73,6 @@ var FDJ = {
 					if (response.status === 'connected') {
 					    // connected
 					    this.set('isLoggedIn', true);
-					    this.getLastSongs();
 					  } else if (response.status === 'not_authorized') {
 						this.set('isLoggedIn', false);
 					    // not_authorized
@@ -97,10 +97,22 @@ var FDJ = {
 					if (response.authResponse) {
 			            // connected
 			            this.set('isLoggedIn', true);
-			            this.getLastSongs();
 			        } else {
 			            // cancelled
 			        }
+				},
+
+				onIsLoggedInChange:function(){
+					if(this.get('isLoggedIn')){
+						this.getLastSongsInterval();
+					}else{
+						clearInterval(this.get('interval_songs'));
+					}
+				},
+
+				getLastSongsInterval:function(){
+					this.getLastSongs();
+					this.set('interval_songs', setInterval($.proxy(this.getLastSongs, this), 60*1000));
 				},
 
 				getLastSongs:function(){
