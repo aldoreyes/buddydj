@@ -29,7 +29,7 @@ var FDJ = {
 				},
 
 				DCSortBy:function(song){
-					return -Date.parse(song.get('publish_time'));
+					return -song.get('publish_time_mili');
 				}
 			});
 
@@ -143,7 +143,9 @@ var FDJ = {
 			});
 
 			this.Models.Song = Backbone.Model.extend({
-
+				initialize:function(){
+					this.set('publish_time_mili', Date.parse(this.get('publish_time')));
+				}
 			});
 
 
@@ -216,7 +218,7 @@ var FDJ = {
 
 				render:function(){
 					this.$el.html(this.template(this.model.attributes));
-					this.$el.attr('data-symbol', this.model.get('publish_time'));
+					this.$el.attr('data-symbol', this.model.get('publish_time_mili'));
 					return this;
 				}
 			});
@@ -238,7 +240,6 @@ var FDJ = {
 				},
 				
 				addSong:function(grr){
-					console.log("addSong", grr);
 					var $container = this.$('#container');
 					var newElement = new FDJ.Views.TileView({model:grr});
 		        	
