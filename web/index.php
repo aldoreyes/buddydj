@@ -91,6 +91,7 @@ Loader!
 </script>
 <script type="text/template" id="tile-template">
 	<p><%= data.song.title  %></p>
+	<p><%= artist  %></p>
 	<p><a class="btn btn-primary btn-large">Learn more »</a></p>
 
 </script>

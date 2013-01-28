@@ -29,7 +29,7 @@ var FDJ = {
 				},
 
 				DCSortBy:function(song){
-					return -Date.parse(song.get('publish_time'));
+					return -song.get('publish_time_mili');
 				}
 			});
 
@@ -143,7 +143,32 @@ var FDJ = {
 			});
 
 			this.Models.Song = Backbone.Model.extend({
+				initialize:function(){
+					this.set('publish_time_mili', Date.parse(this.get('publish_time')));
 
+					//create artist homogenous property
+					
+					switch(this.get('application').name){
+					case "Spotify":
+						var musician = this.get('data').musician;
+						this.set('artist', musician?musician.title:"");
+						break;
+					case "Rdio":
+						var groups = this.constructor.rdioParse(this.get('data').song.url);
+						this.set('artist', groups[1].replace(/_/g, ' '));
+						this.set('album', groups[2].replace(/_/g, ' '));
+						break;
+					default:
+						this.set('artist','');
+						break;
+					}
+				}
+			},
+			//STATIC
+			{
+				rdioParse:function(url){
+					return /^.*artist\/(.+)\/album\/(.+)\/track\/.*/g.exec(url)
+				}
 			});
 
 
@@ -216,7 +241,7 @@ var FDJ = {
 
 				render:function(){
 					this.$el.html(this.template(this.model.attributes));
-					this.$el.attr('data-symbol', this.model.get('publish_time'));
+					this.$el.attr('data-symbol', this.model.get('publish_time_mili'));
 					return this;
 				}
 			});
@@ -236,7 +261,10 @@ var FDJ = {
 				},
 				
 				addSong:function(grr){
+<<<<<<< HEAD
 					//console.log("addSong", grr);
+=======
+>>>>>>> 5040f75e2c68f6f3d3475da849f9860b448a96c0
 					var $container = this.$('#container');
 					var newElement = new FDJ.Views.TileView({model:grr});
 		        	
