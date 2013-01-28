@@ -121,7 +121,7 @@ var FDJ = {
 				},
 
 				onLastSongs:function(response){
-					console.log("get songs");
+				
 					var friends = response.friends.data;
 					var l_friends = friends.length;
 					var last_songs = [];
@@ -216,9 +216,7 @@ var FDJ = {
 
 				initialize:function(){
 					this.listenTo(this.model.get('current_queue'), 'add', this.addSong);
-				
-					this.render();
-					
+					this.render();					
 					
 				},
 				
@@ -359,8 +357,8 @@ var FDJ = {
 
 				doDebugAddSong:function(){
 					event.preventDefault();
-				
-		   			window.view.playerView.addSong();
+					this.model.onLastSongsChange();
+		   			
 			
 					console.log("deDebugAddSong");
 				}
