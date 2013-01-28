@@ -288,21 +288,12 @@ var FDJ = {
 					
 					var obj = this.$el;
 					var t = this;
-					var faded = false;
-					
-					var popInterval =	setInterval(function(){
-							console.log("hit interval");
-							console.log(faded);
-							if(!faded){
-								console.log("DO POP");
-								clearInterval(popInterval);
-							}
-							
-							
-						},2000);
+
 						
-					
-				
+					obj.html(view.$el);
+					t.$('#wrapper').attr('style', 'margin-top:' + t.$('#header').height() + "px");
+					view.reInit();
+					/*
 					 obj.fadeTo(500, 0,function(){
 							console.log("finished dimming down");
 							obj.html(view.$el);
@@ -319,7 +310,7 @@ var FDJ = {
 							});
 					    });	
 					
-					 
+					 */
 						
 					/*
 					obj.fadeOut(500, function() {
