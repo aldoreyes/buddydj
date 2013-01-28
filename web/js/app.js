@@ -85,7 +85,7 @@ var FDJ = {
 				},
 
 				doLogin:function(){
-					FB.login($.proxy(this.onFBLogin, this), {scope:'friends_actions.music'});
+					FB.login($.proxy(this.onFBLogin, this));
 				},
 				
 				doLogout:function(){
