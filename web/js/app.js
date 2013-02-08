@@ -21,11 +21,17 @@ var FDJ = {
 					this.listenTo(this.get('facebookProxy'), 'change:last_songs', this.onLastSongsChange);
 					this.set('current_queue', new FDJ.Collections.Queue());
 					this.get('current_queue').comparator = this.DCSortBy;
+					this.set('current_view',null);
+					this.set('main_view',null);
+					
+					this.set('debug_fake_song', null);
 					
 				},
 
 				onLastSongsChange:function(){
+					console.log("detected change in songs");	
 					this.get('current_queue').update(this.get('facebookProxy').get('last_songs').models, {remove:false});
+					
 				},
 
 				DCSortBy:function(song){
@@ -35,8 +41,16 @@ var FDJ = {
 
 			this.Models.FacebookProxy = Backbone.Model.extend({
 				initialize:function(){
+					
+					
 					this.listenTo(this, 'change:isLoggedIn', this.onIsLoggedInChange);
+					this.set('fbUser', null);
+					this.set('isInitialSongGet', true);
+					
+			
 				},
+				
+				
 
 				loadJDKAndInit:function(){
 					window.fbAsyncInit = $.proxy(this.init, this);
@@ -73,6 +87,7 @@ var FDJ = {
 					if (response.status === 'connected') {
 					    // connected
 					    this.set('isLoggedIn', true);
+						this.getFBUser();
 					  } else if (response.status === 'not_authorized') {
 						this.set('isLoggedIn', false);
 					    // not_authorized
@@ -91,11 +106,14 @@ var FDJ = {
 				doLogout:function(){
 					FB.logout();
 					this.set('isLoggedIn', false);
+					this.set('fbUser', false);
+					this.set('current_queue', null);
 				},
 
 				onFBLogin:function(response){
 					if (response.authResponse) {
 			            // connected
+			            this.getFBUser();
 			            this.set('isLoggedIn', true);
 			        } else {
 			            // cancelled
@@ -114,12 +132,23 @@ var FDJ = {
 					this.getLastSongs();
 					this.set('interval_songs', setInterval($.proxy(this.getLastSongs, this), 60*1000));
 				},
-
-				getLastSongs:function(){
-					FB.api('/me?fields=friends.fields(music.listens.fields(id,from,publish_time,application,data).limit(5))', $.proxy(this.onLastSongs, this));
-
+				
+				getFBUser:function(){
+					FB.api('/me', $.proxy(this.onFBUser, this));
+				},
+				
+				onFBUser:function(response){
+					this.set('fbUser', response);
+				
 				},
 
+				getLastSongs:function(){
+					console.log("report");
+					FB.api('/me?fields=friends.fields(music.listens.fields(id,from,publish_time,application,data).limit(5))', $.proxy(this.onLastSongs, this));
+					
+				},
+				
+				
 				onLastSongs:function(response){
 				
 					var friends = response.friends.data;
@@ -137,8 +166,9 @@ var FDJ = {
 							last_songs.push(friends_songs[j]);
 						};
 					}
-					
+					this.trigger('initialsongs', new FDJ.Collections.Queue(last_songs));
 					this.set('last_songs', new FDJ.Collections.Queue(last_songs));
+			
 				}				
 			});
 
@@ -182,15 +212,102 @@ var FDJ = {
 			/*****************
 			*** VIEWS
 			******************/
+			this.Views.MainView = Backbone.View.extend({
+				el:$("#main-container"),
+
+				initialize:function(){
+					//console.log(this.$el);
+					this.model.set('main_view',this);
+					this.listenTo(this.model.get('facebookProxy'), 'change:isLoggedIn', this.userLoginChange);
+					this.model.get('facebookProxy').loadJDKAndInit();
+					this.render();
+						
+					var isLoggedIn = this.model.get('facebookProxy').get('isLoggedIn');
+				
+					//this.loaderView = new FDJ.Views.LoaderView();
+					//this.loginView = new FDJ.Views.LoginView({ model: this.model.get('facebookProxy') } );
+					//this.playerView = new FDJ.Views.PlayerView({ model: this.model.get('facebookProxy') } );
+					
+					if(isLoggedIn){
+						this.transitionTo(new FDJ.Views.PlayerView({ model: this.model } ));
+					}
+					
+					this.$el.html(new FDJ.Views.LoaderView({ model: this.model }).$el);
+				
+				
+				},
+				
+				userLoginChange:function(){
+					var isLoggedIn = this.model.get('facebookProxy').get('isLoggedIn');
+
+					if(isLoggedIn){
+						this.transitionTo(new FDJ.Views.PlayerView({ model: this.model}));
+					}else{
+						this.transitionTo(new FDJ.Views.LoginView({ model: this.model}));
+					}
+					
+				},
+				
+				transitionTo:function(view){
+					
+					if(this.model.get("current_view")!=null){
+						//console.log(this.model.get("current_view").$el);
+						this.model.get("current_view").remove();
+					} 
+					
+					this.model.set('current_view',view);
+					this.model.get("main_view").$el.html(view.$el);
+					
+					
+					/*
+					var obj = this.$el;
+					var t = this;
+
+				
+					obj.html(view.$el);
+					t.$('#wrapper').attr('style', 'margin-top:' + t.$('#header').height() + "px");
+					view.reInit();
+					
+					 obj.fadeTo(500, 0,function(){
+							console.log("finished dimming down");
+							obj.html(view.$el);
+							faded = true;
+					        obj.fadeTo(500,1,function(){
+							
+							
+								console.log("finished dimming UP");
+								//TO DO!! change this to media queries...getto hack for now
+								t.$('#wrapper').attr('style', 'margin-top:' + t.$('#header').height() + "px");
+								view.reInit();
+								
+						
+							});
+					    });	
+					
+					 */
+					
+				},
+				
+				render:function(){
+					console.log("render main view");
+					this.$el.html();
+					return this;
+				}
+
+				
+			});
+			
 			this.Views.MainQueue = Backbone.View.extend({
 
 			});
+			
 			
 			this.Views.LoaderView = Backbone.View.extend({
 				id:"loader",
 				template: _.template($('#loader-template').html()),
 
 				initialize:function(){
+					this.model.set('current_view',this);
 					console.log("loader init");
 					this.render();
 				},
@@ -198,16 +315,12 @@ var FDJ = {
 				render:function(){
 					this.$el.html(this.template());
 					return this;
-				},
-				
-				reInit:function(){
-					
 				}
 			});
 			
 
 			this.Views.LoginView = Backbone.View.extend({
-				className:"panel",
+				id:"login",
 				template: _.template($('#login-template').html()),
 
 				initialize:function(){
@@ -221,17 +334,15 @@ var FDJ = {
 				},
 				
 				doLogin:function(){
+					
+					this.model.get('facebookProxy').doLogin();
 					event.preventDefault();
-					this.model.doLogin();
+					
 				},
 
 				render:function(){
 					this.$el.html(this.template());
 					return this;
-				},
-
-				reInit:function(){
-					console.log("login re-init");
 				}
 			});
 
@@ -251,8 +362,16 @@ var FDJ = {
 				template: _.template($('#player-template').html()),
 
 				initialize:function(){
-					this.listenTo(this.model.get('current_queue'), 'add', this.addSong);
-					this.render();					
+					console.log("init player");
+				
+					this.listenTo(this.model.get("facebookProxy"), 'change:fbUser', this.showFBUser);
+					
+					//this.listenTo(this.model.get("facebookProxy"), 'initialsongs', this.initSongs);
+					this.model.get("facebookProxy").bind('initialsongs', this.initialSongs, this);
+					
+					this.render();	
+					
+						
 					
 				},
 				
@@ -260,113 +379,85 @@ var FDJ = {
 					"click #fbLogoutButton": "doLogout"
 				},
 				
-				addSong:function(grr){
-<<<<<<< HEAD
-					//console.log("addSong", grr);
-=======
->>>>>>> 5040f75e2c68f6f3d3475da849f9860b448a96c0
+				initIsotope:function(){
+					console.log("init isotope");
+					
+					
+	
+				},
+				
+				initialSongs:function(songs){
+					console.log("get initial song list!");
+				
+					this.model.get("facebookProxy").off("initialsongs");
+					
 					var $container = this.$('#container');
-					var newElement = new FDJ.Views.TileView({model:grr});
-		        	
+					
+						$container.isotope({
+			        		itemSelector : '.song',
+			        		filter: '*',
+			        		getSortData : {
+			          			symbol : function( $elem ) {
+			            			return $elem.attr('data-symbol');
+			          			}
+			        		},
+			        		sortBy : 'symbol'
+			      		});
+						console.log("init isotop");
+
+						
+
+						
+						for (var i=0;i<songs.models.length;i++)
+						{ 
+							
+							var newElement = new FDJ.Views.TileView({model:songs.models[i]});
+							this.model.set('debug_fake_song',songs.models[i]);
+							$container.append( newElement.render().$el ).isotope( 'addItems', newElement.render().$el);
+						}
+
+						var thisView = this;
+						setTimeout(function(){
+							$container.isotope('reloadItems').isotope({ sortBy: 'original-order' }).isotope('option', { sortBy: 'symbol' });
+							thisView.listenTo(this.model.get('current_queue'), 'add', this.addSong);
+						}, 1000);
+						
+						//this.listenTo(this.model.get('current_queue'), 'add', this.addSong);
+						
+				},
+				
+				addSong:function(grr){
+		
+					console.log("add songs");
+		
 		        	$container.prepend( newElement.render().$el ).isotope('reloadItems').isotope({ sortBy: 'original-order' })
-		          	// set sort back to symbol for inserting
-		          	.isotope('option', { sortBy: 'symbol' });
+							          	// set sort back to symbol for inserting
+							          	.isotope('option', { sortBy: 'symbol' });
+		          	
 				},
 				
 				doLogout:function(){
 					this.model.get("facebookProxy").doLogout();
 				},
 				
-				reInit:function(){
-					var $container = $('#container');
-					
-					$container.isotope({
-		        		itemSelector : '.song',
-		        		filter: '*',
-		        		getSortData : {
-		          			symbol : function( $elem ) {
-		            			return $elem.attr('data-symbol');
-		          			}
-		        		},
-		        		sortBy : 'symbol'
-		      		});
-					
-					//console.log(this.$('#header').height());
+				
+				
+				showFBUser:function(){
+					console.log("show fb user");
+					this.render();	
 				},
 
 				render:function(){
-					this.$el.html(this.template());
+			
+					
+					console.log("render player");
+					//console.log(this.model.get("facebookProxy").attributes);
+					this.$el.html(this.template(this.model.get("facebookProxy").attributes));
 					return this;
 				}
 			});
 
-			this.Views.MainView = Backbone.View.extend({
-				el:$("#main-container"),
-
-				initialize:function(){
-					//console.log(this.$el);
-					this.listenTo(this.model.get('facebookProxy'), 'change:isLoggedIn', this.userLoginChange);
-					this.model.get('facebookProxy').loadJDKAndInit();
-					var isLoggedIn = this.model.get('facebookProxy').get('isLoggedIn');
-				
-					//this.loaderView = new FDJ.Views.LoaderView();
-					//this.loginView = new FDJ.Views.LoginView({ model: this.model.get('facebookProxy') } );
-					//this.playerView = new FDJ.Views.PlayerView({ model: this.model.get('facebookProxy') } );
-					
-					if(isLoggedIn){
-						this.transitionTo(new FDJ.Views.PlayerView({ model: this.model } ));
-					}
-					
-					this.$el.append(new FDJ.Views.LoaderView().$el);
-					
-				
-				},
-				
-				userLoginChange:function(){
-					var isLoggedIn = this.model.get('facebookProxy').get('isLoggedIn');
-
-					if(isLoggedIn){
-						
-						this.transitionTo(new FDJ.Views.PlayerView({ model: this.model}));
-					}else{
-						this.transitionTo(new FDJ.Views.LoginView({ model: this.model.get('facebookProxy') } ));
-					}
-					
-				},
-				
-				transitionTo:function(view){
-					//console.log(view.$el.html());
-					
-					var obj = this.$el;
-					var t = this;
-
-						
-					obj.html(view.$el);
-					t.$('#wrapper').attr('style', 'margin-top:' + t.$('#header').height() + "px");
-					view.reInit();
-					/*
-					 obj.fadeTo(500, 0,function(){
-							console.log("finished dimming down");
-							obj.html(view.$el);
-							faded = true;
-					        obj.fadeTo(500,1,function(){
-							
-							
-								console.log("finished dimming UP");
-								//TO DO!! change this to media queries...getto hack for now
-								t.$('#wrapper').attr('style', 'margin-top:' + t.$('#header').height() + "px");
-								view.reInit();
-								
-						
-							});
-					    });	
-					
-					 */
-					
-				}
-
-				
-			});
+			
 
 			this.Views.DebugPanel = Backbone.View.extend({
 				
@@ -396,9 +487,16 @@ var FDJ = {
 
 				doDebugAddSong:function(){
 					event.preventDefault();
-					this.model.onLastSongsChange();
-		   			
-			
+					//this.model.onLastSongsChange();
+		   			var $container = $('#container');
+					var newElement = new FDJ.Views.TileView({model:this.model.get('debug_fake_song')});
+
+		        	$container.prepend( newElement.render().$el ).isotope('reloadItems').isotope({ sortBy: 'original-order' })
+		          	// set sort back to symbol for inserting
+		          	//.isotope('option', { sortBy: 'symbol' });
+					//$container.isotope('reloadItems').isotope({ sortBy: 'original-order' })
+					          	// set sort back to symbol for inserting
+					  //        	.isotope('option', { sortBy: 'symbol' })
 					console.log("deDebugAddSong");
 				}
 			
