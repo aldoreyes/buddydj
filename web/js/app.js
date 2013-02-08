@@ -418,7 +418,7 @@ var FDJ = {
 
 						var thisView = this;
 						setTimeout(function(){
-							$container.isotope('reloadItems').isotope({ sortBy: 'original-order' }).isotope('option', { sortBy: 'symbol' });
+							$container.isotope('reloadItems').isotope({ sortBy: 'symbol',sortAscending : false });
 							thisView.listenTo(this.model.get('current_queue'), 'add', this.addSong);
 						}, 1000);
 						
@@ -430,9 +430,7 @@ var FDJ = {
 		
 					console.log("add songs");
 		
-		        	$container.prepend( newElement.render().$el ).isotope('reloadItems').isotope({ sortBy: 'original-order' })
-							          	// set sort back to symbol for inserting
-							          	.isotope('option', { sortBy: 'symbol' });
+		        	$container.prepend( newElement.render().$el ).isotope('reloadItems').isotope({ sortBy: 'symbol', sortAscending : false });
 		          	
 				},
 				
