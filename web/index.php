@@ -59,7 +59,8 @@ Loader!
           <a class="brand" href="#">Facebook DJ</a>
           <div class="nav-collapse collapse">
             <p class="navbar-text pull-right">
-              Hello ! <button class="btn btn-mini" type="button" id="fbLogoutButton">Log Out</button>
+
+              <% if(fbUser) { %><img src="http://graph.facebook.com/<%= fbUser.id %>/picture" width="25" height="25" border="0"> Hello <%= fbUser.name %><% } %>! <button class="btn btn-mini" type="button" id="fbLogoutButton">Log Out</button>
             </p>
           </div><!--/.nav-collapse -->
 					<div class="nav-collapse collapse">
