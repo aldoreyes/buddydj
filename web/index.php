@@ -16,6 +16,8 @@
 	<a id="debug-logout-button" href="#">User Logout</a>
 	<br>
 	<a id="debug-add-song" href="#">Add Song</a>
+	<br>
+	<a id="debug-change-fbname" href="#">Change FB Name</a>
 </div>
 
 <script type="text/template" id="loader-template">
@@ -51,17 +53,15 @@ Loader!
 	</div>
 </script>
 
-<script type="text/template" id="player-template">
+<script type="text/template" id="home-template">
+
 <div  class="navbar navbar-inverse navbar-fixed-top">
       <div id="header" class="navbar-inner">
         <div class="container-fluid">
       
           <a class="brand" href="#">Facebook DJ</a>
           <div class="nav-collapse collapse">
-            <p class="navbar-text pull-right">
-
-              <% if(fbUser) { %><img src="http://graph.facebook.com/<%= fbUser.id %>/picture" width="25" height="25" border="0"> Hello <%= fbUser.name %><% } %>! <button class="btn btn-mini" type="button" id="fbLogoutButton">Log Out</button>
-            </p>
+            <p id="fbInfoViewEl" class="navbar-text pull-right"></p>
           </div><!--/.nav-collapse -->
 					<div class="nav-collapse collapse">
             <p class="navbar-text">
@@ -74,9 +74,8 @@ Loader!
       </div>
  </div>
 
-<div id="wrapper">
-	<div id="container" class="clearfix"></div>
-</div>
+<div id="gridViewEl"></div>
+
 <div class="navbar navbar-inverse navbar-fixed-bottom">
       <div class="navbar-inner">
         <div class="container-fluid">
@@ -90,19 +89,31 @@ Loader!
       </div>
     </div>
 </script>
+
 <script type="text/template" id="tile-template">
 	<p><%= data.song.title  %></p>
 	<p><%= artist  %></p>
-	<p><a class="btn btn-primary btn-large">Learn more »</a></p>
-
+	<p><img src="http://graph.facebook.com/<%= from.id %>/picture" width="25" height="25" border="0"> <%= from.name  %></p>
+	<p>Time:<%= publish_time  %></p>
+	<p>Number:<%= itemIndex  %></p>
 </script>
 
-	<script src="http://code.jquery.com/jquery-latest.js"></script>
-	<script src="js/bootstrap.min.js"></script>
+<script type="text/template" id="fbinfo-template">
+	<% if(fbUser) { %><img src="http://graph.facebook.com/<%= fbUser.id %>/picture" width="25" height="25" border="0"> Hello <%= fbUser.name %><% } %>! <button class="btn btn-mini" type="button" id="fbLogoutButton">Log Out</button>
+</script>
+
+<script type="text/template" id="grid-template">
+	<div id="wrapper">
+		<div id="container" class="clearfix"></div>
+	</div>
+</script>
+
+
 	<script src="js/libs/jquery.min.js"></script>
+	<script src="js/libs/bootstrap.min.js"></script>
 	<script src="js/libs/underscore-min.js"></script>
 	<script src="js/libs/backbone-min.js"></script>
-	<script src="js/app.js"></script>
-	<script src="js/jquery.isotope.min.js"></script>
+	<script src="js/app-ck.js"></script>
+	<script src="js/libs/jquery.isotope.min.js"></script>
 </body>
 </html>
