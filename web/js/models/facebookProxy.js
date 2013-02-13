@@ -128,7 +128,8 @@ this.Models.FacebookProxy = Backbone.Model.extend({
 
 						};
 					}
-					console.log(last_songs.length);
+					
+					//console.log(last_songs.length);
 					this.trigger('initialsongs', new FDJ.Collections.Queue(last_songs));
 					this.set('last_songs', new FDJ.Collections.Queue(last_songs));
 			

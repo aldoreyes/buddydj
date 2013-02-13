@@ -39,16 +39,19 @@ this.Views.GridView = Backbone.View.extend({
 						var thisView = this;
 						setTimeout(function(){
 							$container.isotope('reloadItems').isotope({ sortBy: 'symbol',sortAscending : false });
-							thisView.listenTo(this.model.get('current_queue'), 'add', this.addSong);
+							thisView.listenTo(this.model.get('current_queue'), 'add', thisView.addSong);
 						}, 1000);
 						
 						//this.listenTo(this.model.get('current_queue'), 'add', this.addSong);
 						
 				},
 
-								
-				addSong:function(grr){		
-					console.log("add songs");
+
+				addSong:function(newSong){		
+					console.log("New Song Added!");
+					console.log(newSong);
+					var $container = this.$('#container');
+					var newElement = new FDJ.Views.TileView({model:newSong});
 		        	$container.prepend( newElement.render().$el ).isotope('reloadItems').isotope({ sortBy: 'symbol', sortAscending : false });
 		          	
 				},

@@ -12,7 +12,8 @@ this.Models.MainModel = Backbone.Model.extend({
 				},
 
 				onLastSongsChange:function(){
-					console.log("detected change in last_songs");	
+					//console.log("detected change in last_songs");	
+					//console.log(this.get('facebookProxy').get('last_songs').models);
 					this.get('current_queue').update(this.get('facebookProxy').get('last_songs').models, {remove:false});
 					
 				},
