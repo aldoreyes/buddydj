@@ -39,6 +39,7 @@ this.Views.GridView = Backbone.View.extend({
 						var thisView = this;
 						setTimeout(function(){
 							$container.isotope('reloadItems').isotope({ sortBy: 'symbol',sortAscending : false });
+							thisView.$('#grid-loader').remove();
 							thisView.listenTo(this.model.get('current_queue'), 'add', thisView.addSong);
 						}, 1000);
 						

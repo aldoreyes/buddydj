@@ -7,7 +7,8 @@ this.Views.DebugPanel = Backbone.View.extend({
 					"click #debug-login-button": "doDebugLogin",
 					"click #debug-logout-button": "doDebugLogout",
 					"click #debug-add-song": "doDebugAddSong",
-					"click #debug-change-fbname": "doDebugChangeFbName"
+					"click #debug-change-fbname": "doDebugChangeFbName",
+					"click #debug-fake-logout": "doDebugFakeLogout"
 				},
 				initialize:function(){
 				
@@ -46,7 +47,12 @@ this.Views.DebugPanel = Backbone.View.extend({
 					//this.model.get("facebookProxy").get("fbUser").name="testing!";
 					this.model.get("facebookProxy").set('fbUser', null);
 					
-				}
+				},
+				doDebugFakeLogout:function(){
+					event.preventDefault();
+					this.model.get('facebookProxy').set('statusError', USER_LOGGEDOUT);
+					console.log("doDebugFakeLogout");
+				},
 			
 
 

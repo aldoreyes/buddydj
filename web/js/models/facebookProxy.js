@@ -5,6 +5,7 @@ this.Models.FacebookProxy = Backbone.Model.extend({
 					this.listenTo(this, 'change:isLoggedIn', this.onIsLoggedInChange);
 					this.set('fbUser', null);
 					this.set('isInitialSongGet', true);
+					this.set('statusError', NO_ERROR);
 					
 			
 				},
@@ -61,6 +62,10 @@ this.Models.FacebookProxy = Backbone.Model.extend({
 				doLogin:function(){
 					FB.login($.proxy(this.onFBLogin, this));
 				},
+
+				doReLogin:function(){
+					FB.login($.proxy(this.onFBReLogin, this));
+				},
 				
 				doLogout:function(){
 					FB.logout();
@@ -74,6 +79,18 @@ this.Models.FacebookProxy = Backbone.Model.extend({
 			            // connected
 			            this.getFBUser();
 			            this.set('isLoggedIn', true);
+			        } else {
+			            // cancelled
+			        }
+				},
+
+
+				onFBReLogin:function(response){
+					if (response.authResponse) {
+						this.getLastSongsInterval();
+			            this.set('statusError', NO_ERROR);
+			            this.getFBUser();
+			            
 			        } else {
 			            // cancelled
 			        }
@@ -108,7 +125,13 @@ this.Models.FacebookProxy = Backbone.Model.extend({
 				
 				
 				onLastSongs:function(response){
+
+			
+				if(typeof response.friends !== 'undefined'){
+					console.log("got data!");
 				
+					this.set('statusError', NO_ERROR);
+
 					var friends = response.friends.data;
 					var l_friends = friends.length;
 					var last_songs = [];
@@ -132,6 +155,25 @@ this.Models.FacebookProxy = Backbone.Model.extend({
 					//console.log(last_songs.length);
 					this.trigger('initialsongs', new FDJ.Collections.Queue(last_songs));
 					this.set('last_songs', new FDJ.Collections.Queue(last_songs));
+				
+				}else if(response.error){
+					
+					if(response.error.type=="http"){
+						this.set('statusError', CONNECTION_LOST);
+
+					}else if(response.error.type=="OAuthException"){					
+						this.set('statusError', USER_LOGGEDOUT);
+						clearInterval(this.get('interval_songs'));
+						
+					}else{
+						console.log("other response error");
+
+					}	
+					
+				}else{
+					this.set('statusError', UNKNOWN_ERROR);
+					
+				}
 			
 				}				
 			});

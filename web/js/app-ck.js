@@ -17,6 +17,8 @@
 //@codekit-append "views/home/fbInfo.js";
 //@codekit-append "views/home/grid.js";
 //@codekit-append "views/home/grid/tile.js";
+//@codekit-append "views/modals/loggedout.js";
+//@codekit-append "views/modals/noconnection.js";
 //@codekit-append "views/debug.js";
 
 //--end framework
@@ -36,6 +38,12 @@ var FDJ = {
 			this.Models = {};
 			this.Views = {};
 			this.Collections = {};
+
+			//error status definitions
+			NO_ERROR = "noError";
+			USER_LOGGEDOUT = "userLoggedOut";
+			CONNECTION_LOST = "connectionLost";
+			UNKNOWN_ERROR = "unknownError";
 
 
 
@@ -79,6 +87,7 @@ this.Models.FacebookProxy = Backbone.Model.extend({
 					this.listenTo(this, 'change:isLoggedIn', this.onIsLoggedInChange);
 					this.set('fbUser', null);
 					this.set('isInitialSongGet', true);
+					this.set('statusError', NO_ERROR);
 					
 			
 				},
@@ -135,6 +144,10 @@ this.Models.FacebookProxy = Backbone.Model.extend({
 				doLogin:function(){
 					FB.login($.proxy(this.onFBLogin, this));
 				},
+
+				doReLogin:function(){
+					FB.login($.proxy(this.onFBReLogin, this));
+				},
 				
 				doLogout:function(){
 					FB.logout();
@@ -148,6 +161,18 @@ this.Models.FacebookProxy = Backbone.Model.extend({
 			            // connected
 			            this.getFBUser();
 			            this.set('isLoggedIn', true);
+			        } else {
+			            // cancelled
+			        }
+				},
+
+
+				onFBReLogin:function(response){
+					if (response.authResponse) {
+						this.getLastSongsInterval();
+			            this.set('statusError', NO_ERROR);
+			            this.getFBUser();
+			            
 			        } else {
 			            // cancelled
 			        }
@@ -182,7 +207,13 @@ this.Models.FacebookProxy = Backbone.Model.extend({
 				
 				
 				onLastSongs:function(response){
+
+			
+				if(typeof response.friends !== 'undefined'){
+					console.log("got data!");
 				
+					this.set('statusError', NO_ERROR);
+
 					var friends = response.friends.data;
 					var l_friends = friends.length;
 					var last_songs = [];
@@ -206,6 +237,25 @@ this.Models.FacebookProxy = Backbone.Model.extend({
 					//console.log(last_songs.length);
 					this.trigger('initialsongs', new FDJ.Collections.Queue(last_songs));
 					this.set('last_songs', new FDJ.Collections.Queue(last_songs));
+				
+				}else if(response.error){
+					
+					if(response.error.type=="http"){
+						this.set('statusError', CONNECTION_LOST);
+
+					}else if(response.error.type=="OAuthException"){					
+						this.set('statusError', USER_LOGGEDOUT);
+						clearInterval(this.get('interval_songs'));
+						
+					}else{
+						console.log("other response error");
+
+					}	
+					
+				}else{
+					this.set('statusError', UNKNOWN_ERROR);
+					
+				}
 			
 				}				
 			});
@@ -406,8 +456,33 @@ this.Views.HomeView = Backbone.View.extend({
 					this.render();	
 					this.$('#fbInfoViewEl').html(new FDJ.Views.FbInfoView({ model: this.model }).$el);
 					this.$('#gridViewEl').html(new FDJ.Views.GridView({ model: this.model }).$el);
+
+					this.listenTo(this.model.get('facebookProxy'), 'change:statusError', this.onStatusError);
+					
+					
 						
 					
+				},
+
+				onStatusError:function(e){
+					
+					if(e.attributes.statusError == USER_LOGGEDOUT){
+						console.log("status error: user logged out");
+						//ask user to log back in
+						this.$('#modalViewEl').html(new FDJ.Views.LoggedoutView({ model: this.model }).$el);
+						  
+					}else if(e.attributes.statusError == CONNECTION_LOST){
+						console.log("status error: connection lost");
+						this.$('#modalViewEl').html(new FDJ.Views.NoconnectionView({ model: this.model }).$el);
+
+					}else if(e.attributes.statusError == NO_ERROR){
+						console.log("AFTER ERROR RESUME NORMAL ACTIVITY!");
+
+					}else if(e.attributes.statusError == UNKNOWN_ERROR){
+						console.log("UNKNOWN_ERROR problem");
+					}else{
+						console.log("other problem");
+					}
 				},
 
 
@@ -498,6 +573,7 @@ this.Views.GridView = Backbone.View.extend({
 						var thisView = this;
 						setTimeout(function(){
 							$container.isotope('reloadItems').isotope({ sortBy: 'symbol',sortAscending : false });
+							thisView.$('#grid-loader').remove();
 							thisView.listenTo(this.model.get('current_queue'), 'add', thisView.addSong);
 						}, 1000);
 						
@@ -540,6 +616,110 @@ this.Views.GridView = Backbone.View.extend({
 			});
 
 /* **********************************************
+     Begin loggedout.js
+********************************************** */
+
+this.Views.LoggedoutView = Backbone.View.extend({
+				id:"loggedout",
+				template: _.template($('#loggedout-template').html()),
+
+				initialize:function(){
+					
+					
+						
+					this.render();
+					console.log("logged out init");
+
+
+					this.listenTo(this.model.get('facebookProxy'), 'change:statusError', this.onStatusError);
+					
+					
+						
+					
+				},
+
+				onStatusError:function(e){
+					if(e.attributes.statusError == NO_ERROR){
+						//console.log("AFTER ERROR RESUME NORMAL ACTIVITY!");
+						this.remove();
+					}
+				},
+
+				
+				
+				events:{
+					"click #fbReLoginButton": "doReLogin"
+				},
+				
+				doReLogin:function(){
+					//this.model.get('facebookProxy').set('statusError', NO_ERROR);
+					//this.remove();
+					this.model.get('facebookProxy').doReLogin();
+					event.preventDefault();
+					
+				},
+
+
+
+				render:function(){
+					this.$el.html(this.template());
+					return this;
+				}
+			});
+
+/* **********************************************
+     Begin noconnection.js
+********************************************** */
+
+this.Views.NoconnectionView = Backbone.View.extend({
+				id:"noconnection",
+				template: _.template($('#noconnection-template').html()),
+
+				initialize:function(){
+					
+					
+						
+					this.render();
+					console.log("no connection out init");
+
+
+					this.listenTo(this.model.get('facebookProxy'), 'change:statusError', this.onStatusError);
+					
+					
+						
+					
+				},
+
+				onStatusError:function(e){
+					if(e.attributes.statusError == NO_ERROR){
+						//console.log("AFTER ERROR RESUME NORMAL ACTIVITY!");
+						this.remove();
+					}
+				},
+
+				
+				
+				events:{
+					"click #ignore": "doIgnore"
+				},
+				
+				doIgnore:function(){
+					//this.model.get('facebookProxy').set('statusError', NO_ERROR);
+					this.remove();
+					
+					event.preventDefault();
+					
+				},
+
+
+
+				render:function(){
+					this.$el.html(this.template());
+					return this;
+				}
+			});
+
+/* **********************************************
      Begin debug.js
 ********************************************** */
 
@@ -552,7 +732,8 @@ this.Views.DebugPanel = Backbone.View.extend({
 					"click #debug-login-button": "doDebugLogin",
 					"click #debug-logout-button": "doDebugLogout",
 					"click #debug-add-song": "doDebugAddSong",
-					"click #debug-change-fbname": "doDebugChangeFbName"
+					"click #debug-change-fbname": "doDebugChangeFbName",
+					"click #debug-fake-logout": "doDebugFakeLogout"
 				},
 				initialize:function(){
 				
@@ -591,7 +772,12 @@ this.Views.DebugPanel = Backbone.View.extend({
 					//this.model.get("facebookProxy").get("fbUser").name="testing!";
 					this.model.get("facebookProxy").set('fbUser', null);
 					
-				}
+				},
+				doDebugFakeLogout:function(){
+					event.preventDefault();
+					this.model.get('facebookProxy').set('statusError', USER_LOGGEDOUT);
+					console.log("doDebugFakeLogout");
+				},
 			
 
 

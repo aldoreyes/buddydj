@@ -9,3 +9,9 @@ var FDJ = {
 			this.Views = {};
 			this.Collections = {};
 
+			//error status definitions
+			NO_ERROR = "noError";
+			USER_LOGGEDOUT = "userLoggedOut";
+			CONNECTION_LOST = "connectionLost";
+			UNKNOWN_ERROR = "unknownError";
+

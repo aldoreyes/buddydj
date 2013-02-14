@@ -3,7 +3,16 @@ body {
   padding-bottom: 40px;
 }
 
+.loader-indicator{
+  display: block;
+    margin-left: auto;
+    margin-right: auto;
+    position: absolute;
+   top: 50%;
+   left: 50%;
+   text-align: center;
 
+}
 
 .song{
 	
@@ -26,7 +35,7 @@ body {
 #debugpanel{
 	position:absolute;
 	width:250px;
-	height:100px;
+	height:150px;
 	background-color:white;
 	z-index:9999;
 	left:500px;
@@ -70,6 +79,26 @@ body {
 .marketing p + h4 {
   margin-top: 28px;
 }
+
+#dialog {
+ 
+
+}
+
+/* Overlay */
+#modal-overlay {
+  background-color:#000;
+  opacity: 0.5; 
+  height: 100%; 
+  width: 100%; 
+  position: fixed; 
+  left: 0px; 
+  top: 0px; 
+  z-index: 1040;
+}
+
+
+
 
 
 /* Start: Recommended Isotope styles */

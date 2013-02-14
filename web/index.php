@@ -18,10 +18,11 @@
 	<a id="debug-add-song" href="#">Add Song</a>
 	<br>
 	<a id="debug-change-fbname" href="#">Change FB Name</a>
+	<br>
+	<a id="debug-fake-logout" href="#">Fake Logout</a>
 </div>
-
 <script type="text/template" id="loader-template">
-Loader!
+	<img class="loader-indicator" src="/img/loader.gif" border="0">
 </script>
 <script type="text/template" id="login-template">
 	<div class="container-narrow">
@@ -88,6 +89,7 @@ Loader!
         </div>
       </div>
     </div>
+<div id="modalViewEl"></div>
 </script>
 
 <script type="text/template" id="tile-template">
@@ -103,9 +105,49 @@ Loader!
 </script>
 
 <script type="text/template" id="grid-template">
+	<div id="grid-loader" class="loader-indicator" >
+		<img  src="/img/loader.gif" border="0">
+		<p>Loading Songs</p> 
+	</div>
 	<div id="wrapper">
 		<div id="container" class="clearfix"></div>
 	</div>
+</script>
+
+
+<script type="text/template" id="loggedout-template">
+	
+	<div class="modal" id="dialog">
+
+	 <div class="container-narrow">
+
+		<div class="jumbotron">
+	        <h1>Ooops!</h1>
+	        <p class="lead">Looks like you have been logged out.</p>
+	        <a class="btn btn-primary btn-large" href="#" id="fbReLoginButton">Sign in with Facebook</a>
+	      </div>
+	</div>
+
+	</div>
+	<div id="modal-overlay"></div>
+</script>
+
+<script type="text/template" id="noconnection-template">
+	
+	<div class="modal" id="dialog">
+
+	 <div class="container-narrow">
+
+		<div class="jumbotron">
+	        <h1>Ooops!</h1>
+	        <p class="lead">Looks like you lost the internets!</p>
+	        <p class="lead">You can <a class="btn btn-primary btn-small" href="#" id="ignore">ignore</a> or try again later.</p>
+	        
+	      </div>
+	</div>
+
+	</div>
+	<div id="modal-overlay"></div>
 </script>
 
 
@@ -113,7 +155,8 @@ Loader!
 	<script src="js/libs/bootstrap.min.js"></script>
 	<script src="js/libs/underscore-min.js"></script>
 	<script src="js/libs/backbone-min.js"></script>
-	<script src="js/app-ck.js"></script>
 	<script src="js/libs/jquery.isotope.min.js"></script>
+	<script src="js/libs/jquery.simplemodal.js"></script>
+	<script src="js/app-ck.js"></script>
 </body>
 </html>
