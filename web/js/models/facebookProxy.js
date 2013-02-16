@@ -166,11 +166,14 @@ this.Models.FacebookProxy = Backbone.Model.extend({
 							for (var j = 0; j < l_songs; j++) {
 								friends_songs[j].itemIndex = songIndex;
 								last_songs.push(friends_songs[j]);
+								this.set('debug_fake_song',friends_songs[j]);
 								songIndex++;
+													
+								
 
 							};
 						}
-
+						this.set("debug_song_array",last_songs);
 						//last_songs = null;
 						//console.log(last_songs.length);
 						this.trigger('initialsongs', new FDJ.Collections.Queue(last_songs));

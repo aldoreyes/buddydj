@@ -29,7 +29,11 @@
 			<br>
 			<a id="debug-change-fbname" href="#">Change FB Name</a>
 			<br>
-			<a id="debug-fake-logout" href="#">Fake Logout</a>
+			<a id="debug-fb-logout" href="#">FB Logout</a>
+			<br>
+			<a id="debug-connectionloss" href="#">Connection Loss</a>
+			<br>
+			<a id="debug-lamefriends" href="#">Lame Friends</a>
 		</div>
 		<!--
 		***************************************

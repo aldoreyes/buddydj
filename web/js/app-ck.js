@@ -61,7 +61,7 @@ this.Models.MainModel = Backbone.Model.extend({
 					this.set('current_view',null);
 					this.set('main_view',null);
 					
-					this.set('debug_fake_song', null);
+
 					
 				},
 
@@ -249,11 +249,14 @@ this.Models.FacebookProxy = Backbone.Model.extend({
 							for (var j = 0; j < l_songs; j++) {
 								friends_songs[j].itemIndex = songIndex;
 								last_songs.push(friends_songs[j]);
+								this.set('debug_fake_song',friends_songs[j]);
 								songIndex++;
+													
+								
 
 							};
 						}
-
+						this.set("debug_song_array",last_songs);
 						//last_songs = null;
 						//console.log(last_songs.length);
 						this.trigger('initialsongs', new FDJ.Collections.Queue(last_songs));
@@ -606,17 +609,16 @@ this.Views.GridView = Backbone.View.extend({
 							for (var i=0;i<songs.models.length;i++)
 							{ 
 								
-								var newElement = new FDJ.Views.TileView({model:songs.models[i]});
-								this.model.set('debug_fake_song',songs.models[i]);
+								var newElement = new FDJ.Views.TileView({model:songs.models[i]});	
 								$container.append( newElement.render().$el ).isotope( 'addItems', newElement.render().$el);
 							}
-
+							
 						}else{
 
-							console.log("friends are lame!");
 							this.$('#noSongsViewEl').html(new FDJ.Views.NoSongsView().$el);
-
+							
 						}
+						
 
 						var thisView = this;
 
@@ -633,7 +635,14 @@ this.Views.GridView = Backbone.View.extend({
 				addSong:function(newSong){		
 					
 					console.log("New Song Added!");
-					console.log(newSong);
+					//console.log(newSong);
+
+					
+					if(this.$('#noSongsViewEl').length != 0){
+						console.log("REMOVING LAME FRIENDS");
+						this.$('#noSongsViewEl').remove();
+					}
+					
 
 					var $container = this.$('#container');
 					var newElement = new FDJ.Views.TileView({model:newSong});
@@ -688,7 +697,7 @@ this.Views.NoSongsView = Backbone.View.extend({
 			});
 
 /* **********************************************
-     Begin loggedOut.js
+     Begin loggedout.js
 ********************************************** */
 
 this.Views.LoggedOutView = Backbone.View.extend({
@@ -736,7 +745,7 @@ this.Views.LoggedOutView = Backbone.View.extend({
 			});
 
 /* **********************************************
-     Begin noConnection.js
+     Begin noconnection.js
 ********************************************** */
 
 this.Views.NoConnectionView = Backbone.View.extend({
@@ -801,7 +810,9 @@ this.Views.DebugPanel = Backbone.View.extend({
 					"click #debug-logout-button": "doDebugLogout",
 					"click #debug-add-song": "doDebugAddSong",
 					"click #debug-change-fbname": "doDebugChangeFbName",
-					"click #debug-fake-logout": "doDebugFakeLogout"
+					"click #debug-fb-logout": "doDebugFBLogout",
+					"click #debug-connectionloss": "doDebugConnectionLoss",
+					"click #debug-lamefriends": "doDebugLameFriends"
 				},
 				initialize:function(){
 				
@@ -820,34 +831,51 @@ this.Views.DebugPanel = Backbone.View.extend({
 				},
 
 				doDebugAddSong:function(){
-					event.preventDefault();
-					//this.model.onLastSongsChange();
-		   			var $container = $('#container');
-					var newElement = new FDJ.Views.TileView({model:this.model.get('debug_fake_song')});
+					
+					var debug_songs = this.model.get("facebookProxy").get("debug_song_array");
+					var fake_song =  this.model.get("facebookProxy").get('debug_fake_song');
+					
+					var rid = Math.floor((Math.random()*10000)+1000);
+					fake_song.cid="c"+ rid;
+					fake_song.id= fake_song.id +"" +  rid;
+					fake_song.publish_time = new Date().toISOString();
+	
+					debug_songs.push(fake_song);
+						
+					this.model.get("facebookProxy").set('last_songs', new FDJ.Collections.Queue(debug_songs));
 
-		        	$container.prepend( newElement.render().$el ).isotope('reloadItems').isotope({ sortBy: 'original-order' })
-		          	// set sort back to symbol for inserting
-		          	//.isotope('option', { sortBy: 'symbol' });
-					//$container.isotope('reloadItems').isotope({ sortBy: 'original-order' })
-					          	// set sort back to symbol for inserting
-					  //        	.isotope('option', { sortBy: 'symbol' })
+					event.preventDefault();
+
 					console.log("deDebugAddSong");
+
 				},
 
 				doDebugChangeFbName:function(){
 					event.preventDefault();
-					console.log("change fb name");
-					//this.model.get("facebookProxy").get("fbUser").name="testing!";
-					this.model.get("facebookProxy").set('fbUser', null);
+					
+					this.model.get("facebookProxy").set('fbUser', {name:"Joe Debug",id:"12302336"});
+					console.log("doDebugChangeFbName");
 					
 				},
-				doDebugFakeLogout:function(){
+				doDebugFBLogout:function(){
 					event.preventDefault();
 					this.model.get('facebookProxy').set('statusError', USER_LOGGEDOUT);
-					console.log("doDebugFakeLogout");
+					console.log("doDebugFBLogout");
 				},
-			
+				
+				doDebugConnectionLoss:function(){
+					event.preventDefault();
+					this.model.get('facebookProxy').set('statusError', CONNECTION_LOST);
+					console.log("doDebugConnectionLoss");
+				},
 
+				doDebugLameFriends:function(){
+					event.preventDefault();
+					$('#container').html("");
+					$('#container').height(0);
+					$('#noSongsViewEl').html(new FDJ.Views.NoSongsView().$el);
+					console.log("doDebugLameFriends");
+				},
 
 				
 			});
