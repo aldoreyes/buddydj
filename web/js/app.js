@@ -17,8 +17,9 @@
 //@codekit-append "views/home/fbInfo.js";
 //@codekit-append "views/home/grid.js";
 //@codekit-append "views/home/grid/tile.js";
-//@codekit-append "views/modals/loggedout.js";
-//@codekit-append "views/modals/noconnection.js";
+//@codekit-append "views/home/grid/noSongs.js";
+//@codekit-append "views/modals/loggedOut.js";
+//@codekit-append "views/modals/noConnection.js";
 //@codekit-append "views/debug.js";
 
 //--end framework

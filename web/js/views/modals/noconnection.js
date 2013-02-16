@@ -1,4 +1,4 @@
-this.Views.NoconnectionView = Backbone.View.extend({
+this.Views.NoConnectionView = Backbone.View.extend({
 				id:"noconnection",
 				template: _.template($('#noconnection-template').html()),
 

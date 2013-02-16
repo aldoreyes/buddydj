@@ -1,38 +1,31 @@
-this.Views.LoggedoutView = Backbone.View.extend({
+this.Views.LoggedOutView = Backbone.View.extend({
+				
 				id:"loggedout",
 				template: _.template($('#loggedout-template').html()),
 
 				initialize:function(){
 					
-					
-						
 					this.render();
 					console.log("logged out init");
 
-
 					this.listenTo(this.model.get('facebookProxy'), 'change:statusError', this.onStatusError);
-					
-					
-						
 					
 				},
 
 				onStatusError:function(e){
+					
 					if(e.attributes.statusError == NO_ERROR){
-						//console.log("AFTER ERROR RESUME NORMAL ACTIVITY!");
 						this.remove();
 					}
-				},
 
-				
+				},
 				
 				events:{
 					"click #fbReLoginButton": "doReLogin"
 				},
 				
 				doReLogin:function(){
-					//this.model.get('facebookProxy').set('statusError', NO_ERROR);
-					//this.remove();
+
 					this.model.get('facebookProxy').doReLogin();
 					event.preventDefault();
 					
@@ -41,7 +34,10 @@ this.Views.LoggedoutView = Backbone.View.extend({
 
 
 				render:function(){
+
 					this.$el.html(this.template());
 					return this;
+
 				}
+				
 			});

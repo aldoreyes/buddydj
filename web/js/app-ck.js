@@ -17,8 +17,9 @@
 //@codekit-append "views/home/fbInfo.js";
 //@codekit-append "views/home/grid.js";
 //@codekit-append "views/home/grid/tile.js";
-//@codekit-append "views/modals/loggedout.js";
-//@codekit-append "views/modals/noconnection.js";
+//@codekit-append "views/home/grid/noSongs.js";
+//@codekit-append "views/modals/loggedOut.js";
+//@codekit-append "views/modals/noConnection.js";
 //@codekit-append "views/debug.js";
 
 //--end framework
@@ -81,23 +82,18 @@ this.Models.MainModel = Backbone.Model.extend({
 ********************************************** */
 
 this.Models.FacebookProxy = Backbone.Model.extend({
+				
 				initialize:function(){
-					
 					
 					this.listenTo(this, 'change:isLoggedIn', this.onIsLoggedInChange);
 					this.set('fbUser', null);
-					this.set('isInitialSongGet', true);
 					this.set('statusError', NO_ERROR);
-					
-			
+
 				},
 				
-				
-
 				loadJDKAndInit:function(){
+					
 					window.fbAsyncInit = $.proxy(this.init, this);
-
-
 					//load jdk
 					(function(d){
 					     var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
@@ -106,9 +102,11 @@ this.Models.FacebookProxy = Backbone.Model.extend({
 					     js.src = "//connect.facebook.net/en_US/all.js";
 					     ref.parentNode.insertBefore(js, ref);
 					   }(document));
+
 				},
 
 				init:function(){
+					
 					FB.init({
 				      appId      : this.get('app_id'), // App ID
 				      channelUrl : this.get('channel'), // Channel File
@@ -122,53 +120,60 @@ this.Models.FacebookProxy = Backbone.Model.extend({
 				    this.trigger('init');
 				},
 
-				
-
 				loginStatus:function(response){
-					console.log("Got FB Status");
+					
 					if (response.status === 'connected') {
-					    // connected
-					    this.set('isLoggedIn', true);
+					// connected
+						this.set('isLoggedIn', true);
 						this.getFBUser();
-					  } else if (response.status === 'not_authorized') {
+					} else if (response.status === 'not_authorized') {
 						this.set('isLoggedIn', false);
-					    // not_authorized
-					    //this.doLogin();
-					  } else {
+						// not_authorized
+						//this.doLogin();
+					} else {
 						this.set('isLoggedIn', false);
-					    // not_logged_in
-					    //this.doLogin();
-					  }
+						// not_logged_in
+						//this.doLogin();
+					}
 				},
 
 				doLogin:function(){
+					
 					FB.login($.proxy(this.onFBLogin, this));
+
 				},
 
 				doReLogin:function(){
+					
 					FB.login($.proxy(this.onFBReLogin, this));
+
 				},
 				
 				doLogout:function(){
+					
 					FB.logout();
 					this.set('isLoggedIn', false);
 					this.set('fbUser', false);
 					this.set('current_queue', null);
+
 				},
 
 				onFBLogin:function(response){
+					
 					if (response.authResponse) {
 			            // connected
 			            this.getFBUser();
 			            this.set('isLoggedIn', true);
+
 			        } else {
 			            // cancelled
 			        }
 				},
 
-
 				onFBReLogin:function(response){
+					
 					if (response.authResponse) {
+						
 						this.getLastSongsInterval();
 			            this.set('statusError', NO_ERROR);
 			            this.getFBUser();
@@ -179,85 +184,106 @@ this.Models.FacebookProxy = Backbone.Model.extend({
 				},
 
 				onIsLoggedInChange:function(){
+					
 					if(this.get('isLoggedIn')){
+
 						this.getLastSongsInterval();
+
 					}else{
+
 						clearInterval(this.get('interval_songs'));
+
 					}
 				},
 
 				getLastSongsInterval:function(){
+					
 					this.getLastSongs();
 					this.set('interval_songs', setInterval($.proxy(this.getLastSongs, this), 60*1000));
+
 				},
 				
 				getFBUser:function(){
+					
 					FB.api('/me', $.proxy(this.onFBUser, this));
+
 				},
 				
 				onFBUser:function(response){
+					
 					this.set('fbUser', response);
 				
 				},
 
 				getLastSongs:function(){
+					
 					FB.api('/me?fields=friends.fields(music.listens.fields(id,from,publish_time,application,data).limit(5))', $.proxy(this.onLastSongs, this));
 					
 				},
 				
 				
 				onLastSongs:function(response){
-
 			
-				if(typeof response.friends !== 'undefined'){
-					console.log("got data!");
-				
-					this.set('statusError', NO_ERROR);
-
-					var friends = response.friends.data;
-					var l_friends = friends.length;
-					var last_songs = [];
-
-					var songIndex =0;
-					var l_songs = 0;
-					var friends_songs = null;
-					for (var i = l_friends - 1; i >= 0; i--) {
-						friends_songs =friends[i]["music.listens"]?friends[i]["music.listens"].data:null;
-						//console.log(friends_songs);
-						if(!friends_songs){continue;} // break if no songs
-						l_songs = friends_songs.length;
-						for (var j = 0; j < l_songs; j++) {
-							friends_songs[j].itemIndex = songIndex;
-							last_songs.push(friends_songs[j]);
-							songIndex++;
-
-						};
-					}
+					if(typeof response.friends !== 'undefined'){
+						
+						console.log("got data!");
 					
-					//console.log(last_songs.length);
-					this.trigger('initialsongs', new FDJ.Collections.Queue(last_songs));
-					this.set('last_songs', new FDJ.Collections.Queue(last_songs));
-				
-				}else if(response.error){
-					
-					if(response.error.type=="http"){
-						this.set('statusError', CONNECTION_LOST);
+						this.set('statusError', NO_ERROR);
 
-					}else if(response.error.type=="OAuthException"){					
-						this.set('statusError', USER_LOGGEDOUT);
-						clearInterval(this.get('interval_songs'));
+						var friends = response.friends.data;
+						var l_friends = friends.length;
+						var last_songs = [];
+
+						var songIndex =0;
+						var l_songs = 0;
+						var friends_songs = null;
+						
+						for (var i = l_friends - 1; i >= 0; i--) {
+							
+							friends_songs =friends[i]["music.listens"]?friends[i]["music.listens"].data:null;
+							//console.log(friends_songs);
+							if(!friends_songs){continue;} // break if no songs
+							
+							l_songs = friends_songs.length;
+							
+							for (var j = 0; j < l_songs; j++) {
+								friends_songs[j].itemIndex = songIndex;
+								last_songs.push(friends_songs[j]);
+								songIndex++;
+
+							};
+						}
+
+						//last_songs = null;
+						//console.log(last_songs.length);
+						this.trigger('initialsongs', new FDJ.Collections.Queue(last_songs));
+						this.set('last_songs', new FDJ.Collections.Queue(last_songs));
+					
+					}else if(response.error){
+						
+						if(response.error.type=="http"){
+							
+							this.set('statusError', CONNECTION_LOST);
+
+						}else if(response.error.type=="OAuthException"){					
+							
+							this.set('statusError', USER_LOGGEDOUT);
+							clearInterval(this.get('interval_songs'));
+							
+						}else{
+							
+							console.log("other response error");
+
+						}	
 						
 					}else{
-						console.log("other response error");
-
-					}	
-					
-				}else{
-					this.set('statusError', UNKNOWN_ERROR);
-					
-				}
+						
+						this.set('statusError', UNKNOWN_ERROR);
+						
+					}
 			
-				}				
+				}	
+							
 			});
 
 /* **********************************************
@@ -448,50 +474,61 @@ this.Views.LoginView = Backbone.View.extend({
 ********************************************** */
 
 this.Views.HomeView = Backbone.View.extend({
+				
 				id:"home",
 				template: _.template($('#home-template').html()),
 
 				initialize:function(){
+					
 					console.log("init home");
 					this.render();	
+					
 					this.$('#fbInfoViewEl').html(new FDJ.Views.FbInfoView({ model: this.model }).$el);
 					this.$('#gridViewEl').html(new FDJ.Views.GridView({ model: this.model }).$el);
-
+					
 					this.listenTo(this.model.get('facebookProxy'), 'change:statusError', this.onStatusError);
-					
-					
 						
-					
 				},
 
 				onStatusError:function(e){
 					
 					if(e.attributes.statusError == USER_LOGGEDOUT){
+						
 						console.log("status error: user logged out");
 						//ask user to log back in
-						this.$('#modalViewEl').html(new FDJ.Views.LoggedoutView({ model: this.model }).$el);
+						this.$('#modalViewEl').html(new FDJ.Views.LoggedOutView({ model: this.model }).$el);
 						  
 					}else if(e.attributes.statusError == CONNECTION_LOST){
+
 						console.log("status error: connection lost");
-						this.$('#modalViewEl').html(new FDJ.Views.NoconnectionView({ model: this.model }).$el);
+						this.$('#modalViewEl').html(new FDJ.Views.NoConnectionView({ model: this.model }).$el);
 
 					}else if(e.attributes.statusError == NO_ERROR){
+
 						console.log("AFTER ERROR RESUME NORMAL ACTIVITY!");
 
 					}else if(e.attributes.statusError == UNKNOWN_ERROR){
+
 						console.log("UNKNOWN_ERROR problem");
+
 					}else{
+
 						console.log("other problem");
+
 					}
+
 				},
 
 
 				render:function(){
+
 					console.log("render home");
 					//console.log(this.model.get("facebookProxy").attributes);
 					this.$el.html(this.template());
 					return this;
+
 				}
+
 			});
 
 /* **********************************************
@@ -533,18 +570,22 @@ this.Views.FbInfoView = Backbone.View.extend({
 ********************************************** */
 
 this.Views.GridView = Backbone.View.extend({
+				
 				id:"grid",
 				template: _.template($('#grid-template').html()),
 
 				initialize:function(){
+					
 					console.log("init grid view");
 					this.model.get("facebookProxy").bind('initialsongs', this.initialSongs, this);
 					this.render();
+
 				},
 
 				initialSongs:function(songs){
+					
 					console.log("get initial song list!");
-				
+					
 					this.model.get("facebookProxy").off("initialsongs");
 					
 					var $container = this.$('#container');
@@ -559,18 +600,26 @@ this.Views.GridView = Backbone.View.extend({
 			        		},
 			        		sortBy : 'symbol'
 			      		});
-						console.log("init isotop");
 
-						
-						for (var i=0;i<songs.models.length;i++)
-						{ 
+						if(songs.length!=0){
 							
-							var newElement = new FDJ.Views.TileView({model:songs.models[i]});
-							this.model.set('debug_fake_song',songs.models[i]);
-							$container.append( newElement.render().$el ).isotope( 'addItems', newElement.render().$el);
+							for (var i=0;i<songs.models.length;i++)
+							{ 
+								
+								var newElement = new FDJ.Views.TileView({model:songs.models[i]});
+								this.model.set('debug_fake_song',songs.models[i]);
+								$container.append( newElement.render().$el ).isotope( 'addItems', newElement.render().$el);
+							}
+
+						}else{
+
+							console.log("friends are lame!");
+							this.$('#noSongsViewEl').html(new FDJ.Views.NoSongsView().$el);
+
 						}
 
 						var thisView = this;
+
 						setTimeout(function(){
 							$container.isotope('reloadItems').isotope({ sortBy: 'symbol',sortAscending : false });
 							thisView.$('#grid-loader').remove();
@@ -581,36 +630,159 @@ this.Views.GridView = Backbone.View.extend({
 						
 				},
 
-
 				addSong:function(newSong){		
+					
 					console.log("New Song Added!");
 					console.log(newSong);
+
 					var $container = this.$('#container');
 					var newElement = new FDJ.Views.TileView({model:newSong});
 		        	$container.prepend( newElement.render().$el ).isotope('reloadItems').isotope({ sortBy: 'symbol', sortAscending : false });
 		          	
 				},
-			
 
 				render:function(){
+					
 					this.$el.html(this.template());
 					console.log("render grid view");
 					return this;
+
 				}
+				
 			});
 
 /* **********************************************
      Begin tile.js
 ********************************************** */
 
+this.Views.TileView = Backbone.View.extend({
+	template: _.template($('#tile-template').html()),
+	className: 'song',
 
-			this.Views.TileView = Backbone.View.extend({
-				template: _.template($('#tile-template').html()),
-				className: 'song',
+	render:function(){
+		this.$el.html(this.template(this.model.attributes));
+		this.$el.attr('data-symbol', this.model.get('publish_time_mili'));
+		return this;
+	}
+});
+
+/* **********************************************
+     Begin noSongs.js
+********************************************** */
+
+this.Views.NoSongsView = Backbone.View.extend({
+				id:"nosongs",
+				template: _.template($('#nosongs-template').html()),
+
+				initialize:function(){
+			
+					this.render();
+					console.log("no songs init");	
+					
+				},
 
 				render:function(){
-					this.$el.html(this.template(this.model.attributes));
-					this.$el.attr('data-symbol', this.model.get('publish_time_mili'));
+					this.$el.html(this.template());
+					return this;
+				}
+			});
+
+/* **********************************************
+     Begin loggedOut.js
+********************************************** */
+
+this.Views.LoggedOutView = Backbone.View.extend({
+				
+				id:"loggedout",
+				template: _.template($('#loggedout-template').html()),
+
+				initialize:function(){
+					
+					this.render();
+					console.log("logged out init");
+
+					this.listenTo(this.model.get('facebookProxy'), 'change:statusError', this.onStatusError);
+					
+				},
+
+				onStatusError:function(e){
+					
+					if(e.attributes.statusError == NO_ERROR){
+						this.remove();
+					}
+
+				},
+				
+				events:{
+					"click #fbReLoginButton": "doReLogin"
+				},
+				
+				doReLogin:function(){
+
+					this.model.get('facebookProxy').doReLogin();
+					event.preventDefault();
+					
+				},
+
+
+
+				render:function(){
+
+					this.$el.html(this.template());
+					return this;
+
+				}
+				
+			});
+
+/* **********************************************
+     Begin noConnection.js
+********************************************** */
+
+this.Views.NoConnectionView = Backbone.View.extend({
+				id:"noconnection",
+				template: _.template($('#noconnection-template').html()),
+
+				initialize:function(){
+					
+					
+						
+					this.render();
+					console.log("no connection out init");
+
+
+					this.listenTo(this.model.get('facebookProxy'), 'change:statusError', this.onStatusError);
+					
+					
+						
+					
+				},
+
+				onStatusError:function(e){
+					if(e.attributes.statusError == NO_ERROR){
+						//console.log("AFTER ERROR RESUME NORMAL ACTIVITY!");
+						this.remove();
+					}
+				},
+
+				
+				
+				events:{
+					"click #ignore": "doIgnore"
+				},
+				
+				doIgnore:function(){
+					//this.model.get('facebookProxy').set('statusError', NO_ERROR);
+					this.remove();
+					
+					event.preventDefault();
+					
+				},
+
+
+
+				render:function(){
+					this.$el.html(this.template());
 					return this;
 				}
 			});
