@@ -6,10 +6,11 @@ FDJ.Views.MainView = Backbone.View.extend({
 					this.model.set('main_view',this);
 					this.listenTo(this.model.get('facebookProxy'), 'change:isLoggedIn', this.userLoginChange);
 					this.model.get('facebookProxy').loadJDKAndInit();
-					this.render();
+					
 						
 					var isLoggedIn = this.model.get('facebookProxy').get('isLoggedIn');
 				
+
 					//this.loaderView = new FDJ.Views.LoaderView();
 					//this.loginView = new FDJ.Views.LoginView({ model: this.model.get('facebookProxy') } );
 					//this.HomeView = new FDJ.Views.HomeView({ model: this.model.get('facebookProxy') } );
@@ -19,8 +20,9 @@ FDJ.Views.MainView = Backbone.View.extend({
 					}
 					
 					this.$el.html(new FDJ.Views.LoaderView({ model: this.model }).$el);
-				
-				
+					this.$el.append(new FDJ.Views.YTPlayer({model:this.model.get('youtubeProxy')}).$el);
+					console.log(this.$el.html());
+					this.model.get('youtubeProxy').loadAndInit();
 				},
 				
 				userLoginChange:function(){
@@ -42,7 +44,7 @@ FDJ.Views.MainView = Backbone.View.extend({
 					} 
 					
 					this.model.set('current_view',view);
-					this.model.get("main_view").$el.html(view.$el);
+					this.model.get("main_view").$el.append(view.$el);
 					
 					
 					/*
@@ -72,12 +74,6 @@ FDJ.Views.MainView = Backbone.View.extend({
 					
 					 */
 					
-				},
-				
-				render:function(){
-					console.log("render main view");
-					this.$el.html();
-					return this;
 				}
 
 				

@@ -14,7 +14,7 @@ FDJ.Views.LoggedOutView = Backbone.View.extend({
 
 				onStatusError:function(e){
 					
-					if(e.attributes.statusError == FDJ.Models.constructor.NO_ERROR){
+					if(e.attributes.statusError == FDJ.Models.FacebookProxy.NO_ERROR){
 						this.remove();
 					}
 

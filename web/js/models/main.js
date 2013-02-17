@@ -1,7 +1,9 @@
 FDJ.Models.MainModel = Backbone.Model.extend({
 				initialize:function(){
 					this.set('facebookProxy', new FDJ.Models.FacebookProxy({app_id:'480004502036911', channel:'/channel.php'}));
+					this.set('youtubeProxy', new FDJ.Models.YoutubeProxy());
 					this.listenTo(this.get('facebookProxy'), 'change:last_songs', this.onLastSongsChange);
+					this.listenTo(this, 'LastSongsChanged', this.autoplay);
 					this.set('current_queue', new FDJ.Collections.Queue());
 					this.get('current_queue').comparator = this.DCSortBy;
 					this.set('current_view',null);
@@ -12,13 +14,34 @@ FDJ.Models.MainModel = Backbone.Model.extend({
 				},
 
 				onLastSongsChange:function(){
-					//console.log("detected change in last_songs");	
-					//console.log(this.get('facebookProxy').get('last_songs').models);
 					this.get('current_queue').update(this.get('facebookProxy').get('last_songs').models, {remove:false});
 					this.trigger('LastSongsChanged');
 				},
 
 				DCSortBy:function(song){
 					return -song.get('publish_time_mili');
+				},
+
+				/**
+				 * Internal function, dont call this outside
+				 * @return {[type]} [description]
+				 */
+				autoplay:function(){
+					this.stopListening(this, "LastSongsChanged");
+					this.playNext();
+				},
+
+				playNext:function(){
+					var currentSong = this.get('current_song');
+					if(this.has('current_song')){
+						this.get('current_song').set('played', true);
+					}
+
+					currentSong = this.get('current_queue').find(function(song){
+						return !song.has('played') || !song.get('player');
+					});
+
+					this.set('current_song', currentSong);
+					this.get('youtubeProxy').play(currentSong);
 				}
 			});
