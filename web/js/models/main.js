@@ -1,4 +1,4 @@
-this.Models.MainModel = Backbone.Model.extend({
+FDJ.Models.MainModel = Backbone.Model.extend({
 				initialize:function(){
 					this.set('facebookProxy', new FDJ.Models.FacebookProxy({app_id:'480004502036911', channel:'/channel.php'}));
 					this.listenTo(this.get('facebookProxy'), 'change:last_songs', this.onLastSongsChange);

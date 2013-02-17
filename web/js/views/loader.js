@@ -1,4 +1,4 @@
-this.Views.LoaderView = Backbone.View.extend({
+FDJ.Views.LoaderView = Backbone.View.extend({
 				id:"loader",
 				template: _.template($('#loader-template').html()),
 

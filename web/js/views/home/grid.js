@@ -1,4 +1,4 @@
-this.Views.GridView = Backbone.View.extend({
+FDJ.Views.GridView = Backbone.View.extend({
 				
 				id:"grid",
 				template: _.template($('#grid-template').html()),

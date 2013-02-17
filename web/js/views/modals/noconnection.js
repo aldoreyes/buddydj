@@ -1,4 +1,4 @@
-this.Views.NoConnectionView = Backbone.View.extend({
+FDJ.Views.NoConnectionView = Backbone.View.extend({
 				id:"noconnection",
 				template: _.template($('#noconnection-template').html()),
 

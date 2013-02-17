@@ -1,4 +1,4 @@
-this.Views.LoginView = Backbone.View.extend({
+FDJ.Views.LoginView = Backbone.View.extend({
 				id:"login",
 				template: _.template($('#login-template').html()),
 

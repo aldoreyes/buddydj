@@ -1,4 +1,4 @@
-this.Views.TileView = Backbone.View.extend({
+FDJ.Views.TileView = Backbone.View.extend({
 	template: _.template($('#tile-template').html()),
 	className: 'song',
 

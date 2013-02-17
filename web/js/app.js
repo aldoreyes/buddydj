@@ -1,5 +1,31 @@
-//--begin framework
-//@codekit-append "appBegin.js";
+var FDJ = {
+	Models : {},
+	Collections : {},
+	Views: {},
+
+	initFramework : function(){
+
+			//error status definitions
+			NO_ERROR = "noError";
+			USER_LOGGEDOUT = "userLoggedOut";
+			CONNECTION_LOST = "connectionLost";
+			UNKNOWN_ERROR = "unknownError";
+
+	},
+
+	initApp:function(){
+		window.model = new FDJ.Models.MainModel();
+		window.view = new FDJ.Views.MainView({model:window.model});
+		window.debug = new FDJ.Views.DebugPanel({model:window.model});
+	},
+};
+
+$(function(){
+	FDJ.initFramework();
+	FDJ.initApp();
+});
+
+
 
 //--models
 //@codekit-append "models/main.js";
@@ -22,5 +48,3 @@
 //@codekit-append "views/modals/noConnection.js";
 //@codekit-append "views/debug.js";
 
-//--end framework
-//@codekit-append "appEnd.js";

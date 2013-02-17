@@ -1,4 +1,4 @@
-this.Views.HomeView = Backbone.View.extend({
+FDJ.Views.HomeView = Backbone.View.extend({
 				
 				id:"home",
 				template: _.template($('#home-template').html()),

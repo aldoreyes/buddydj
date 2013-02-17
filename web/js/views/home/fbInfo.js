@@ -1,4 +1,4 @@
-this.Views.FbInfoView = Backbone.View.extend({
+FDJ.Views.FbInfoView = Backbone.View.extend({
 				id:"fbInfo",
 				template: _.template($('#fbinfo-template').html()),
 

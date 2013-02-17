@@ -1,4 +1,4 @@
-this.Views.LoggedOutView = Backbone.View.extend({
+FDJ.Views.LoggedOutView = Backbone.View.extend({
 				
 				id:"loggedout",
 				template: _.template($('#loggedout-template').html()),

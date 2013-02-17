@@ -1,4 +1,4 @@
-	this.Models.Song = Backbone.Model.extend({
+	FDJ.Models.Song = Backbone.Model.extend({
 				initialize:function(){
 					this.set('publish_time_mili', Date.parse(this.get('publish_time')));
 					

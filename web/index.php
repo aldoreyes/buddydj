@@ -205,7 +205,7 @@
 		<script src="js/libs/underscore-min.js"></script>
 		<script src="js/libs/backbone-min.js"></script>
 		<script src="js/libs/jquery.isotope.min.js"></script>
-		<script src="js/app-ck.js"></script>
+		<script src="js/app.min.js"></script>
 
 	</body>
 </html>

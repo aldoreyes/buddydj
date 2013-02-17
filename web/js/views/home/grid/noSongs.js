@@ -1,4 +1,4 @@
-this.Views.NoSongsView = Backbone.View.extend({
+FDJ.Views.NoSongsView = Backbone.View.extend({
 				id:"nosongs",
 				template: _.template($('#nosongs-template').html()),
 

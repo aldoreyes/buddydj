@@ -1,4 +1,4 @@
-this.Models.FacebookProxy = Backbone.Model.extend({
+FDJ.Models.FacebookProxy = Backbone.Model.extend({
 				
 				initialize:function(){
 					

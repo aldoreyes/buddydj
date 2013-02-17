@@ -1,4 +1,4 @@
-this.Views.MainView = Backbone.View.extend({
+FDJ.Views.MainView = Backbone.View.extend({
 				el:$("#main-container"),
 
 				initialize:function(){

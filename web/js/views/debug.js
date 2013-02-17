@@ -1,4 +1,4 @@
-this.Views.DebugPanel = Backbone.View.extend({
+FDJ.Views.DebugPanel = Backbone.View.extend({
 				
 				el:$("#debugpanel"),
 				
