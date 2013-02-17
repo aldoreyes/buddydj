@@ -30,7 +30,7 @@ FDJ.Views.DebugPanel = Backbone.View.extend({
 
 				doDebugAddSong:function(){
 					
-					var debug_songs = this.model.get("facebookProxy").get("debug_song_array");
+					
 					var fake_song =  this.model.get("facebookProxy").get('debug_fake_song');
 					
 					var rid = Math.floor((Math.random()*10000)+1000);
@@ -38,9 +38,8 @@ FDJ.Views.DebugPanel = Backbone.View.extend({
 					fake_song.id= fake_song.id +"" +  rid;
 					fake_song.publish_time = new Date().toISOString();
 	
-					debug_songs.push(fake_song);
 						
-					this.model.get("facebookProxy").set('last_songs', new FDJ.Collections.Queue(debug_songs));
+					this.model.get("current_queue").add(new FDJ.Model.Song(fake_song));
 
 					event.preventDefault();
 
