@@ -6,10 +6,7 @@ var FDJ = {
 	initFramework : function(){
 
 			//error status definitions
-			NO_ERROR = "noError";
-			USER_LOGGEDOUT = "userLoggedOut";
-			CONNECTION_LOST = "connectionLost";
-			UNKNOWN_ERROR = "unknownError";
+			
 
 	},
 
@@ -19,13 +16,6 @@ var FDJ = {
 		window.debug = new FDJ.Views.DebugPanel({model:window.model});
 	},
 };
-
-$(function(){
-	FDJ.initFramework();
-	FDJ.initApp();
-});
-
-
 
 //--models
 //@codekit-append "models/main.js";
@@ -48,3 +38,7 @@ $(function(){
 //@codekit-append "views/modals/noConnection.js";
 //@codekit-append "views/debug.js";
 
+$(function(){
+	FDJ.initFramework();
+	FDJ.initApp();
+});

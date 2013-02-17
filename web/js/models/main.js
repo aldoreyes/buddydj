@@ -7,7 +7,7 @@ FDJ.Models.MainModel = Backbone.Model.extend({
 					this.set('current_view',null);
 					this.set('main_view',null);
 					
-					this.set('debug_fake_song', null);
+
 					
 				},
 

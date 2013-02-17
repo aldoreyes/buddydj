@@ -17,22 +17,22 @@ FDJ.Views.HomeView = Backbone.View.extend({
 
 				onStatusError:function(e){
 					
-					if(e.attributes.statusError == USER_LOGGEDOUT){
+					if(e.attributes.statusError == FDJ.Models.constructor.USER_LOGGEDOUT){
 						
 						console.log("status error: user logged out");
 						//ask user to log back in
 						this.$('#modalViewEl').html(new FDJ.Views.LoggedOutView({ model: this.model }).$el);
 						  
-					}else if(e.attributes.statusError == CONNECTION_LOST){
+					}else if(e.attributes.statusError == FDJ.Models.constructor.CONNECTION_LOST){
 
 						console.log("status error: connection lost");
 						this.$('#modalViewEl').html(new FDJ.Views.NoConnectionView({ model: this.model }).$el);
 
-					}else if(e.attributes.statusError == NO_ERROR){
+					}else if(e.attributes.statusError == FDJ.Models.constructor.NO_ERROR){
 
 						console.log("AFTER ERROR RESUME NORMAL ACTIVITY!");
 
-					}else if(e.attributes.statusError == UNKNOWN_ERROR){
+					}else if(e.attributes.statusError == FDJ.Models.constructor.UNKNOWN_ERROR){
 
 						console.log("UNKNOWN_ERROR problem");
 

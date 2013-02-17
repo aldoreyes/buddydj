@@ -35,17 +35,16 @@ FDJ.Views.GridView = Backbone.View.extend({
 							for (var i=0;i<songs.models.length;i++)
 							{ 
 								
-								var newElement = new FDJ.Views.TileView({model:songs.models[i]});
-								this.model.set('debug_fake_song',songs.models[i]);
+								var newElement = new FDJ.Views.TileView({model:songs.models[i]});	
 								$container.append( newElement.render().$el ).isotope( 'addItems', newElement.render().$el);
 							}
-
+							
 						}else{
 
-							console.log("friends are lame!");
 							this.$('#noSongsViewEl').html(new FDJ.Views.NoSongsView().$el);
-
+							
 						}
+						
 
 						var thisView = this;
 
@@ -62,7 +61,14 @@ FDJ.Views.GridView = Backbone.View.extend({
 				addSong:function(newSong){		
 					
 					console.log("New Song Added!");
-					console.log(newSong);
+					//console.log(newSong);
+
+					
+					if(this.$('#noSongsViewEl').length != 0){
+						console.log("REMOVING LAME FRIENDS");
+						this.$('#noSongsViewEl').remove();
+					}
+					
 
 					var $container = this.$('#container');
 					var newElement = new FDJ.Views.TileView({model:newSong});

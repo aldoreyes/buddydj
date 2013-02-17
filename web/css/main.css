@@ -35,7 +35,7 @@ body {
 #debugpanel{
 	position:absolute;
 	width:250px;
-	height:150px;
+	
 	background-color:white;
 	z-index:9999;
 	left:500px;

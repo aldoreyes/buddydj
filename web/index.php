@@ -2,6 +2,7 @@
 <html>
 	<head>
 		<title>BuddyDJ</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
 		<!-- Bootstrap -->
 		<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
 		<link href="css/main.css" rel="stylesheet" media="screen">
@@ -29,7 +30,11 @@
 			<br>
 			<a id="debug-change-fbname" href="#">Change FB Name</a>
 			<br>
-			<a id="debug-fake-logout" href="#">Fake Logout</a>
+			<a id="debug-fb-logout" href="#">FB Logout</a>
+			<br>
+			<a id="debug-connectionloss" href="#">Connection Loss</a>
+			<br>
+			<a id="debug-lamefriends" href="#">Lame Friends</a>
 		</div>
 		<!--
 		***************************************
