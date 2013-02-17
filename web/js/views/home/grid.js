@@ -6,7 +6,7 @@ FDJ.Views.GridView = Backbone.View.extend({
 				initialize:function(){
 					
 					console.log("init grid view");
-					this.model.bind('LastSongsChanged', this.initialSongs, this);
+					this.listenTo(this.model, 'LastSongsChanged', this.initialSongs);
 					this.render();
 
 				},
@@ -15,7 +15,7 @@ FDJ.Views.GridView = Backbone.View.extend({
 					var songs = this.model.get('current_queue');
 					console.log("get initial song list!");
 					
-					this.model.off("LastSongsChanged");
+					this.stopListening(this.model, "LastSongsChanged");
 					
 					var $container = this.$('#container');
 					
