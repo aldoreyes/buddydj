@@ -55,13 +55,13 @@ FDJ.Views.DebugPanel = Backbone.View.extend({
 				},
 				doDebugFBLogout:function(){
 					event.preventDefault();
-					this.model.get('facebookProxy').set('statusError', FDJ.Models.constructor.USER_LOGGEDOUT);
+					this.model.get('facebookProxy').set('statusError', FDJ.Models.FacebookProxy.USER_LOGGEDOUT);
 					console.log("doDebugFBLogout");
 				},
 				
 				doDebugConnectionLoss:function(){
 					event.preventDefault();
-					this.model.get('facebookProxy').set('statusError', FDJ.Models.constructor.CONNECTION_LOST);
+					this.model.get('facebookProxy').set('statusError', FDJ.Models.FacebookProxy.CONNECTION_LOST);
 					console.log("doDebugConnectionLoss");
 				},
 

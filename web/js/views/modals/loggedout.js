@@ -13,9 +13,8 @@ FDJ.Views.LoggedOutView = Backbone.View.extend({
 				},
 
 				onStatusError:function(e){
-					console.log("change resigstered:" + e.attributes.statusError);
-					console.log(FDJ.Models.constructor.NO_ERROR); //UNDEFINED!! WHY!
-					if(e.attributes.statusError == FDJ.Models.constructor.NO_ERROR){
+	
+					if(e.attributes.statusError == FDJ.Models.FacebookProxy.NO_ERROR){
 						this.remove();
 					}
 

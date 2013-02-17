@@ -98,7 +98,11 @@ body {
 }
 
 
-
+/*YT Player*/
+#yt-player{
+  position: absolute;
+  left:-1000px;
+}
 
 
 /* Start: Recommended Isotope styles */

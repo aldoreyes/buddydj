@@ -20,6 +20,7 @@ var FDJ = {
 //--models
 //@codekit-append "models/main.js";
 //@codekit-append "models/facebookProxy.js";
+//@codekit-append "models/YoutubeProxy.js";
 //@codekit-append "models/song.js";
 
 //--collections
@@ -32,6 +33,7 @@ var FDJ = {
 //@codekit-append "views/home.js";
 //@codekit-append "views/home/fbInfo.js";
 //@codekit-append "views/home/grid.js";
+//@codekit-append "views/home/player.js";
 //@codekit-append "views/home/grid/tile.js";
 //@codekit-append "views/home/grid/noSongs.js";
 //@codekit-append "views/modals/loggedOut.js";
