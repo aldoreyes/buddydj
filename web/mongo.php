@@ -3,7 +3,7 @@
 <body>
 <h1>MongoHQ Test</h1>
 <?php
-
+  try {
     // connect to MongoHQ assuming your MONGOHQ_URL environment
     // variable contains the connection string
     $connection_url = getenv("mongodb://fdjdb:49ikk29s8@linus.mongohq.com:10048/app11333631");
