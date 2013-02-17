@@ -92,7 +92,7 @@ FDJ.Models.FacebookProxy = Backbone.Model.extend({
 		if (response.authResponse) {
 			
 			this.getLastSongsInterval();
-            this.set('statusError', NO_ERROR);
+            this.set('statusError', this.constructor.NO_ERROR);
             this.getFBUser();
             
         } else {
@@ -144,7 +144,6 @@ FDJ.Models.FacebookProxy = Backbone.Model.extend({
 		if(typeof response.friends !== 'undefined'){
 			
 			console.log("got data!");
-		
 			this.set('statusError', this.constructor.NO_ERROR);
 
 			var friends = response.friends.data;
