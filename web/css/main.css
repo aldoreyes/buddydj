@@ -100,7 +100,8 @@ body {
 
 /*YT Player*/
 #yt-player{
-  display: none;
+  position: absolute;
+  left:-1000px;
 }
 
 

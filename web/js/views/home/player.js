@@ -10,10 +10,10 @@ FDJ.Views.YTPlayer = Backbone.View.extend({
 		console.log('createPlayer', this.el);
 		this.stopListening(this.model, "change:loaded");
 		this.model.set('player', new YT.Player('yt-player', {
-	      height: '390',
+			playerVars: {'autoplay':0, 'controls':0},
+	      height: '480',
 	      width: '640',
 	      videoId: 'ex2E4vyGem0',
-	      autoplay: 1
 	    }));
 	}
 
