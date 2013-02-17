@@ -6,16 +6,16 @@ FDJ.Views.GridView = Backbone.View.extend({
 				initialize:function(){
 					
 					console.log("init grid view");
-					this.model.get("facebookProxy").bind('initialsongs', this.initialSongs, this);
+					this.model.bind('LastSongsChanged', this.initialSongs, this);
 					this.render();
 
 				},
 
-				initialSongs:function(songs){
-					
+				initialSongs:function(){
+					var songs = this.model.get('current_queue');
 					console.log("get initial song list!");
 					
-					this.model.get("facebookProxy").off("initialsongs");
+					this.model.off("LastSongsChanged");
 					
 					var $container = this.$('#container');
 					

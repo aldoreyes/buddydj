@@ -15,7 +15,7 @@ FDJ.Models.MainModel = Backbone.Model.extend({
 					//console.log("detected change in last_songs");	
 					//console.log(this.get('facebookProxy').get('last_songs').models);
 					this.get('current_queue').update(this.get('facebookProxy').get('last_songs').models, {remove:false});
-					
+					this.trigger('LastSongsChanged');
 				},
 
 				DCSortBy:function(song){

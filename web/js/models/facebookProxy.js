@@ -176,7 +176,7 @@ FDJ.Models.FacebookProxy = Backbone.Model.extend({
 			this.set("debug_song_array",last_songs);
 			//last_songs = null;
 			//console.log(last_songs.length);
-			this.trigger('initialsongs', new FDJ.Collections.Queue(last_songs));
+			
 			this.set('last_songs', new FDJ.Collections.Queue(last_songs));
 		
 		}else if(response.error){
