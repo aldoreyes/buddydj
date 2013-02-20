@@ -12,7 +12,7 @@ app.listen(port, function() {
   console.log("Listening on " + port);
 });
 */
-var io = require('socket.io').listen(8080);
+var io = require('socket.io').listen(process.env.PORT);
 var mongo = require('mongodb');
 var connetionString = 'mongodb://fdjdb:49ikk29s8@linus.mongohq.com:10048/app11333631';
 var DB = null;
