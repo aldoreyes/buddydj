@@ -13,6 +13,16 @@ app.listen(port, function() {
 });
 */
 var io = require('socket.io').listen(process.env.PORT);
+
+// Heroku won't actually allow us to use WebSockets
+// so we have to setup polling instead.
+// https://devcenter.heroku.com/articles/using-socket-io-with-node-js-on-heroku
+io.configure(function () {
+  io.set("transports", ["xhr-polling"]);
+  io.set("polling duration", 10);
+});
+
+
 var mongo = require('mongodb');
 var connetionString = 'mongodb://fdjdb:49ikk29s8@linus.mongohq.com:10048/app11333631';
 var DB = null;
