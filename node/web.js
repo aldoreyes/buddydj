@@ -1,18 +1,21 @@
-/*
-var express = require('express');
 
-var app = express.createServer(express.logger());
+
+var express = require('express'),
+    app = express.createServer(express.logger()),
+    io = require('socket.io').listen(app);
+
+
+
 
 app.get('/', function(request, response) {
   response.send('Hello World!');
 });
 
-var port = process.env.PORT || 5000;
+var port = process.env.PORT || 5000; // Use the port that Heroku provides or default to 5000
 app.listen(port, function() {
-  console.log("Listening on " + port);
+  console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
 });
-*/
-var io = require('socket.io').listen(process.env.PORT);
+
 
 // Heroku won't actually allow us to use WebSockets
 // so we have to setup polling instead.
