@@ -1,29 +1,6 @@
 
-
 var express = require('express'),
-    app = express.createServer(express.logger()),
-    io = require('socket.io').listen(app);
-
-
-
-
-app.get('/', function(request, response) {
-  response.send('Hello World!');
-});
-
-var port = process.env.PORT || 5000; // Use the port that Heroku provides or default to 5000
-app.listen(port, function() {
-  console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
-});
-
-
-// Heroku won't actually allow us to use WebSockets
-// so we have to setup polling instead.
-// https://devcenter.heroku.com/articles/using-socket-io-with-node-js-on-heroku
-io.configure(function () {
-  io.set("transports", ["xhr-polling"]);
-  io.set("polling duration", 10);
-});
+    app = express.createServer(express.logger());
 
 
 var mongo = require('mongodb');
@@ -35,45 +12,57 @@ mongo.connect(connetionString, function(err, db){
     });
 
 
-io.sockets.on('connection', function (socket) {
-  
-  //socket.emit('news', { hello: 'world' });
-  
-  /*
-  socket.on('my other event', function (data) {
-    console.log(data);
-  });  
-    */
-
-  socket.on('getYtSong', function (data) {
-    console.log("Getting Song Id: " + data.songId);
-
-    var songReturn = {result:null, song:null};
-    var c = DB.collection('cached_yt_songs');
-    var jsNow = new Date(new Date().getTime());
-
-    var now = new Date(jsNow.getTime());
-    var cacheDate = new Date(jsNow.setDate(jsNow.getDate()-3));
 
 
-    var doc = c.findOne({songId:data.songId, created_on:{$gt:cacheDate, $lte:now}}, function(err, cachedSong) {
-        
-        if(cachedSong==null){
-          var newSong = {songId: data.songId, songName: data.songName, created_on:now};
-          c.update({songId:data.songId},newSong,{upsert:true});
-
-          songReturn.result = 'new';
-          songReturn.song = newSong;
-
-        }else{
-          songReturn.result = 'cached';
-          songReturn.song = cachedSong;
-
-        }
-
-         socket.emit('onGetYtSong', songReturn);
-
-    });
-   
-  });
+app.get('/', function(request, response) {
+  response.send('Hello World!');
 });
+
+app.get('/song/:songId/:songName/:songArtist?', function(request, response) {
+  
+  var t = this;
+  var vars = request.params;
+  var songReturn = {result:null, song:null, request:null};
+  var originalRequest = {songId:vars.songId, songName: vars.songName, songArtist:vars.songArtist };
+  songReturn.request = originalRequest;
+
+  var c = DB.collection('cached_yt_songs');
+  var jsNow = new Date(new Date().getTime());
+
+  var now = new Date(jsNow.getTime());
+  var cacheDate = new Date(jsNow.setDate(jsNow.getDate()-3));
+
+
+  var doc = c.findOne({songId:vars.songId, created_on:{$gt:cacheDate, $lte:now}}, function(err, cachedSong) {
+      
+      if(cachedSong==null){
+        var newSong = {songId: vars.songId, songName: vars.songName, created_on:now};
+        c.update({songId:vars.songId},newSong,{upsert:true});
+
+        songReturn.result = 'new';
+        songReturn.song = newSong;
+
+      }else{
+        songReturn.result = 'cached';
+        songReturn.song = cachedSong;
+
+      }
+      response.send(songReturn);
+  });
+
+
+  
+});
+
+var port = process.env.PORT || 5000; // Use the port that Heroku provides or default to 5000
+
+
+app.listen(port, function() {
+  console.log(port);
+  console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
+});
+
+
+
+
+
