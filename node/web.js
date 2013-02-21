@@ -14,7 +14,12 @@ mongo.connect(connetionString, function(err, db){
     });
 
 
-
+app.all('*', function(req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type');
+  next();
+});
 
 app.get('/', function(request, response) {
   response.send('Hello World!');
@@ -24,7 +29,7 @@ app.get('/song/:songId/:songName/:songArtist?', function(request, response) {
   
   var t = this;
   var vars = request.params;
-  var songReturn = {result:null, song:null, request:null};
+  var songReturn = {result:null, song:null, request:null, ytquery:null};
   var originalRequest = {songId:vars.songId, songName: vars.songName, songArtist:vars.songArtist };
   songReturn.request = originalRequest;
 
@@ -42,12 +47,12 @@ app.get('/song/:songId/:songName/:songArtist?', function(request, response) {
  
         var ytSongName = encodeURIComponent("\"" + vars.songName +"\"");
         var ytArtistName = ((vars.songArtist!=null) ? encodeURIComponent("\"" + vars.songArtist +"\"") : "");
-        var yQuery = ytSongName + ytArtistName;
-       
+        var ytQuery = ytSongName + ytArtistName;
+   
         var options = {
           hostname: 'gdata.youtube.com',
           port: 80,
-          path: '/feeds/api/videos?q=title:'+ yQuery +'&max-results=1&v=2&alt=json&fields=entry(title,media:group(media:player,yt:videoid),yt:statistics(@viewCount))&orderby=viewCount&key=' + youTubeKey,
+          path: '/feeds/api/videos?q=title:'+ ytQuery +'&max-results=1&v=2&alt=json&fields=entry(title,media:group(media:player,yt:videoid),yt:statistics(@viewCount))&orderby=viewCount&key=' + youTubeKey,
           method: 'GET'
         };
         
@@ -68,11 +73,13 @@ app.get('/song/:songId/:songName/:songArtist?', function(request, response) {
 
                 songReturn.result = 'new';
                 songReturn.song = newSong;
+                songReturn.ytquery = ytQuery;
                 response.send(songReturn);
 
              }else{
 
                 songReturn.result = {error:'no song returned from YT!'};
+                songReturn.ytquery = ytQuery;
                 response.send(songReturn);
 
              }
@@ -82,6 +89,7 @@ app.get('/song/:songId/:songName/:songArtist?', function(request, response) {
 
         req.on('error', function(e) {
           songReturn.result = {error:e.message};
+          songReturn.ytquery = ytQuery;
           response.send(songReturn);
           //console.log('problem with request: ' + e.message);
         });
