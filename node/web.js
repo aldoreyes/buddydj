@@ -1,11 +1,13 @@
 
 var express = require('express'),
+    http = require("http"), 
     app = express.createServer(express.logger());
 
 
 var mongo = require('mongodb');
 var connetionString = 'mongodb://fdjdb:49ikk29s8@linus.mongohq.com:10048/app11333631';
 var DB = null;
+var youTubeKey = 'AI39si7wn5CUxjC2ktbcy-Xg7YpL6S3DQFiQg4wU8JdxB2dJp1vnfH1dHlW8YQm6aRb-sZCQMSLpJirEjtnLxQAN0a0uzshWjQ';
 
 mongo.connect(connetionString, function(err, db){
     DB = db;
@@ -36,18 +38,65 @@ app.get('/song/:songId/:songName/:songArtist?', function(request, response) {
   var doc = c.findOne({songId:vars.songId, created_on:{$gt:cacheDate, $lte:now}}, function(err, cachedSong) {
       
       if(cachedSong==null){
-        var newSong = {songId: vars.songId, songName: vars.songName, created_on:now};
-        c.update({songId:vars.songId},newSong,{upsert:true});
+        //go out and make requsest to youtube
+ 
+        var ytSongName = encodeURIComponent("\"" + vars.songName +"\"");
+        var ytArtistName = ((vars.songArtist!=null) ? encodeURIComponent("\"" + vars.songArtist +"\"") : "");
+        var yQuery = ytSongName + ytArtistName;
+       
+        var options = {
+          hostname: 'gdata.youtube.com',
+          port: 80,
+          path: '/feeds/api/videos?q=title:'+ yQuery +'&max-results=1&v=2&alt=json&fields=entry(title,media:group(media:player,yt:videoid),yt:statistics(@viewCount))&orderby=viewCount&key=' + youTubeKey,
+          method: 'GET'
+        };
+        
 
-        songReturn.result = 'new';
-        songReturn.song = newSong;
+        var req = http.request(options, function(res) {
+
+          res.setEncoding('utf8');
+          
+          res.on('data', function (ytResponse) {
+            
+             var ytResponse = JSON.parse(ytResponse); 
+
+             if(ytResponse.feed.entry){
+                
+                var firstSong = ytResponse.feed.entry[0];
+                var newSong = {songId: vars.songId, songName: vars.songName, songYTData:firstSong, created_on:now};
+                c.update({songId:vars.songId},newSong,{upsert:true});
+
+                songReturn.result = 'new';
+                songReturn.song = newSong;
+                response.send(songReturn);
+
+             }else{
+
+                songReturn.result = {error:'no song returned from YT!'};
+                response.send(songReturn);
+
+             }
+
+          });
+        });
+
+        req.on('error', function(e) {
+          songReturn.result = {error:e.message};
+          response.send(songReturn);
+          //console.log('problem with request: ' + e.message);
+        });
+
+
+        req.end();
 
       }else{
+
         songReturn.result = 'cached';
         songReturn.song = cachedSong;
+        response.send(songReturn);
 
       }
-      response.send(songReturn);
+      
   });
 
 
@@ -55,7 +104,6 @@ app.get('/song/:songId/:songName/:songArtist?', function(request, response) {
 });
 
 var port = process.env.PORT || 5000; // Use the port that Heroku provides or default to 5000
-
 
 app.listen(port, function() {
   console.log(port);
