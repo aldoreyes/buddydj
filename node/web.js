@@ -15,10 +15,21 @@ mongo.connect(connetionString, function(err, db){
 
 
 app.all('*', function(req, res, next) {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Content-Type');
-  next();
+
+  var allowedHost = [
+    'http://fdj.local',
+    'http://fdjweb.heroku.com'
+  ];
+  //allow CORS 
+  if(allowedHost.indexOf(req.headers.origin) !== -1) {
+
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    next();
+  }else{
+    res.send({auth: false});
+  }
 });
 
 app.get('/', function(request, response) {
