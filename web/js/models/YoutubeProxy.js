@@ -19,12 +19,7 @@ FDJ.Models.YoutubeProxy = Backbone.Model.extend({
 	},
 
 	play:function(song){
-		console.log("SONG", song);
-		if(song.has('videoId')){
-
-		}else{
-			//song.fetch();
-		}
+		this.set('song', song);
 	},
 
 	pause:function(){

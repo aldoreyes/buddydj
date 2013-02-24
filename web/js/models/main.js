@@ -48,6 +48,16 @@ FDJ.Models.MainModel = Backbone.Model.extend({
 					});
 
 					this.set('current_song', currentSong);
-					this.get('youtubeProxy').play(currentSong);
+					if(current_song.has('videoId')){
+						this.get('youtubeProxy').play(currentSong);
+					}else{
+						this.listenTo(currentSong, "change:videoId", this.playOnSongLoad);
+					}
+					
+				},
+
+				playOnSongLoad:function(){
+					this.stopListening(this.get("current_song"), "change:videoId");
+					this.get('youtubeProxy').play(this.get("current_song"));
 				}
 			});

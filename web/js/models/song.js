@@ -1,4 +1,9 @@
 FDJ.Models.Song = Backbone.Model.extend({
+
+			url:function(){
+				return (this.collection?this.collection.url:"") + this.get('id')+"/"+this.get('data').song.title+(this.get("artist").length>0?"/"+this.get("artist"):"");
+			},
+
 			initialize:function(){
 				this.set('publish_time_mili', Date.parse(this.get('publish_time')));
 				
