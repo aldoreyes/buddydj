@@ -128,6 +128,7 @@
 			<p><img src="http://graph.facebook.com/<%= from.id %>/picture" width="25" height="25" border="0"> <%= from.name  %></p>
 			<p>Time:<%= publish_time  %></p>
 			<p>Number:<%= itemIndex  %></p>
+			<a href="#" class="play">Play</a>
 		</script>
 		<!--
 		***************************************

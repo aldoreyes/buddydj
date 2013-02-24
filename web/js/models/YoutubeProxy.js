@@ -29,5 +29,14 @@ FDJ.Models.YoutubeProxy = Backbone.Model.extend({
 
 	pause:function(){
 		this.set('playing', !this.get('playing'));
+	},
+
+	getYouTubeSongInfo:function(song){
+		console.log(song.data.song.id, song.data.song.title);
+
+		$.getJSON('http://127.0.0.1:5000/song/'+song.data.song.id + "/" + song.data.song.title + "/" + song.artist, function(data) {
+			 console.log(data);
+			 console.log(data.song.songYTData.media$group.media$player.url);
+		});
 	}
 });

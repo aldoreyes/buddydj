@@ -1,9 +1,14 @@
 <!-- PHP Mongo Docs: http://php.net/manual/en/class.mongodb.php -->
 <html>
 <body>
-<h1>MongoHQ Test</h1>
 <?php
   try {
+
+    $SONG_ID = $_GET['sId'];
+    $SONG_NAME = $_GET['sName'];
+
+    $songReturn = array();
+
     // connect to MongoHQ assuming your MONGOHQ_URL environment
     // variable contains the connection string
     $connection_url = "mongodb://fdjdb:49ikk29s8@linus.mongohq.com:10048/app11333631";
@@ -17,7 +22,41 @@
  
     // use the database we connected to
     $db = $m->selectDB($db_name);
- 
+
+    //$song = array('songId'=>2,'songName'=>'another song');
+    //$db->cached_yt_songs->save($song);
+
+
+    $now = new MongoDate(time());
+    $cacheDate = new MongoDate(strtotime ( '-3 day' , time()));
+
+
+
+    $cachedSong = $db->cached_yt_songs->findOne(array('songId' => $SONG_ID, "created_on" => array('$gt' => $cacheDate , '$lte' => $now)));
+   
+    
+    if ($cachedSong==null){
+      //song not in DB go to YOUTUBE and get info
+      $song = array('songId'=>$SONG_ID,'songName'=> $SONG_NAME, "created_on" => $now);
+      $db->cached_yt_songs->update( array('songId'=> $SONG_ID),$song, array("upsert"=> true));
+      //echo("song not found, went to youtube, saved song");
+      //print_r($song);
+      $songReturn['result']="new";
+      $songReturn['song']=$song;
+     
+
+    }else{
+      $songReturn['result']="cached";
+      $songReturn['song']=$cachedSong;
+      
+      //echo("found song in db already");
+      //print_r($cachedSong);
+    }
+
+
+
+    echo(json_encode($songReturn));
+ /*
     echo "<h2>Collections</h2>";
     echo "<ul>";
  
@@ -45,7 +84,7 @@
         echo "</pre>";
       }
     }
- 
+ */
     // disconnect from server
     $m->close();
   } catch ( MongoConnectionException $e ) {
