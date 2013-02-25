@@ -23,6 +23,7 @@ app.all('*', function(req, res, next) {
     'http://localhost'
   ];
   //allow CORS 
+  console.log("req origin", req.headers.origin);
   if(allowedHost.indexOf(req.headers.origin) !== -1) {
     res.header('Access-Control-Allow-Origin', req.headers.origin);
     res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
