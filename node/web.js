@@ -25,7 +25,7 @@ app.all('*', function(req, res, next) {
   //allow CORS 
   if(allowedHost.indexOf(req.headers.origin) !== -1) {
 
-    res.header('Access-Control-Allow-Origin', 'req.headers.origin');
+    res.header('Access-Control-Allow-Origin', req.headers.origin);
     res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
     res.header('Access-Control-Allow-Headers', 'Content-Type');
     next();
