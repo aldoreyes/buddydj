@@ -105,8 +105,8 @@ app.get('/song/:songId/:songName/:songArtist?', function(request, response) {
         });
 
         req.on('error', function(e) {
-          songReturn.result = {error:e.message};
-          songReturn.ytquery = ytQuery;
+          songReturn.videoId = -1;
+          //songReturn.ytquery = ytQuery;
           response.send(songReturn);
           //console.log('problem with request: ' + e.message);
         });

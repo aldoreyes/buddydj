@@ -18,8 +18,13 @@ FDJ.Models.YoutubeProxy = Backbone.Model.extend({
 	},
 
 	play:function(song){
-		this.set('song', song);
-		this.set('paused', false);
+		if(song.get('videoId') != -1){
+			this.set('song', song);
+			this.set('paused', false);
+		}
+		else{
+			this.trigger("complete");
+		}
 	},
 
 	pause:function(){
