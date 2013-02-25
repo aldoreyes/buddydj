@@ -8,16 +8,20 @@ FDJ.Views.YTPlayer = Backbone.View.extend({
 	},
 
 	onSongChange:function(){
-		this.get('player').loadVideoById(this.model.get('song').get('videoId'));
+		console.log("onSongChange");
+		this.model.get('player').loadVideoById(this.model.get('song').get('videoId'));
+		this.model.get('player').playVideo();
 	},
 
 	createPlayer:function(){
 		this.stopListening(this.model, "change:loaded");
 		this.model.set('player', new YT.Player('yt-player', {
-			playerVars: {'autoplay':0, 'controls':0},
+			playerVars: {'autoplay':0, 'controls':1},
 	      height: '480',
 	      width: '640',
-	      videoId: 'ex2E4vyGem0',
+	      events:{
+	      	'onStateChange': $.proxy(this.model.__onStateChange, this.model)
+	      }
 	    }));
 	}
 

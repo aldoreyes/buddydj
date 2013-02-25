@@ -12,6 +12,7 @@ FDJ.Models.MainModel = Backbone.Model.extend({
 					this.listenTo(this.get('facebookProxy'), 'change:last_songs', this.onLastSongsChange);
 					this.listenTo(this, 'LastSongsChanged', this.autoplay);
 					this.listenTo(this.get('current_queue'), 'add', this.autoFetchSong);
+					this.listenTo(this.get('youtubeProxy'), 'complete', this.playNext);
 					
 				},
 
@@ -38,13 +39,14 @@ FDJ.Models.MainModel = Backbone.Model.extend({
 				},
 
 				playNext:function(){
+					console.log("PLAY NEXT!!!");
 					var currentSong = this.get('current_song');
 					if(this.has('current_song')){
 						this.get('current_song').set('played', true);
 					}
 
 					currentSong = this.get('current_queue').find(function(song){
-						return !song.has('played') || !song.get('player');
+						return !song.has('played') || !song.get('played');
 					});
 
 					this.set('current_song', currentSong);
@@ -57,6 +59,7 @@ FDJ.Models.MainModel = Backbone.Model.extend({
 				},
 
 				playOnSongLoad:function(){
+					console.log("playOnSongLoad");
 					this.stopListening(this.get("current_song"), "change:videoId");
 					this.get('youtubeProxy').play(this.get("current_song"));
 				}
