@@ -95,8 +95,8 @@ app.get('/song/:songId/:songName/:songArtist?', function(request, response) {
 
              }else{
 
-                songReturn.result = {error:'no song returned from YT!'};
-                songReturn.ytquery = ytQuery;
+                songReturn.videoId = -1;
+                //songReturn.ytquery = ytQuery;
                 response.send(songReturn);
 
              }
