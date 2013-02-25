@@ -115,7 +115,7 @@ app.get('/song/:songId/:songName/:songArtist?', function(request, response) {
       }else{
 
         songReturn.loaded = true;
-        songReturn.videoId = firstSong.songYTData["media$group"]["yt$videoid"]['$t'];
+        songReturn.videoId = cachedSong.songYTData["media$group"]["yt$videoid"]['$t'];
                 
         response.send(songReturn);
 
