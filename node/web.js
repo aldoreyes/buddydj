@@ -19,7 +19,7 @@ app.all('*', function(req, res, next) {
   var allowedHost = [
     'http://fdj.local',
     'http://fdjweb.heroku.com',
-    'http://fdjnode.herokuapp.com/',
+    'http://fdjnode.herokuapp.com',
     'http://localhost'
   ];
   //allow CORS 
