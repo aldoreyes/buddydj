@@ -80,13 +80,14 @@ app.get('/song/:songId/:songName/:songArtist?', function(request, response) {
              var ytResponse = JSON.parse(ytResponse); 
 
              if(ytResponse.feed.entry){
-                
+                //console.log(options.hostname + options.path);
                 var firstSong = ytResponse.feed.entry[0];
                 var newSong = {songId: vars.songId, songName: vars.songName, songYTData:firstSong, created_on:now};
                 c.update({songId:vars.songId},newSong,{upsert:true});
 
                 songReturn.loaded = true;
-                songReturn.videoId = firstSong.songYTData["media$group"]["yt$videoid"]['$t'];
+                songReturn.videoId = firstSong["media$group"]["yt$videoid"]['$t'];
+                
                 //songReturn.result = 'new';
                 //songReturn.song = newSong;
                 //songReturn.ytquery = ytQuery;
