@@ -22,7 +22,7 @@ FDJ.Models.MainModel = Backbone.Model.extend({
 				},
 
 				autoFetchSong:function(song){
-					song.fetch();
+					song.fetch({update:true});
 				},
 
 				DCSortBy:function(song){

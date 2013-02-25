@@ -4,13 +4,11 @@ FDJ.Views.HomeView = Backbone.View.extend({
 				template: _.template($('#home-template').html()),
 
 				initialize:function(){
-					
-					console.log("init home");
 					this.render();	
 					
 					this.$('#fbInfoViewEl').html(new FDJ.Views.FbInfoView({ model: this.model }).$el);
 					this.$('#gridViewEl').html(new FDJ.Views.GridView({ model: this.model }).$el);
-					
+					this.$('#header').html(new FDJ.Views.HeaderView({model: this.model}).$el);
 					this.listenTo(this.model.get('facebookProxy'), 'change:statusError', this.onStatusError);
 						
 				},
@@ -46,8 +44,6 @@ FDJ.Views.HomeView = Backbone.View.extend({
 
 
 				render:function(){
-
-					console.log("render home");
 					//console.log(this.model.get("facebookProxy").attributes);
 					this.$el.html(this.template());
 					return this;

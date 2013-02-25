@@ -2,8 +2,7 @@ FDJ.Models.YoutubeProxy = Backbone.Model.extend({
 				
 	initialize:function(){
 		this.set('loaded', false);
-		this.set('playing', false);
-
+		this.set('paused', true);
 	},
 
 	loadAndInit:function(){
@@ -20,9 +19,11 @@ FDJ.Models.YoutubeProxy = Backbone.Model.extend({
 
 	play:function(song){
 		this.set('song', song);
+		this.set('paused', false);
 	},
 
 	pause:function(){
+		this.set('paused', !this.get('paused'));
 	},
 
 	getYouTubeSongInfo:function(song){
@@ -36,8 +37,14 @@ FDJ.Models.YoutubeProxy = Backbone.Model.extend({
 
 	__onStateChange:function(object){
 		this.set('state', object.data, YT.PlayerState.ENDED);
-		if(object.data == YT.PlayerState.ENDED){
+		switch(object.data){
+		case YT.PlayerState.ENDED:
 			this.trigger('complete');
+			break;
+		case YT.PlayerState.PLAYING:
+			break;
+		case YT.PlayerState.PAUSED:
+			break;
 		}
 	}
 });

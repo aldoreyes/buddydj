@@ -31,6 +31,7 @@ var FDJ = {
 //@codekit-append "views/loader.js";
 //@codekit-append "views/login.js";
 //@codekit-append "views/home.js";
+////@codekit-append "views/home/header.js";
 //@codekit-append "views/home/fbInfo.js";
 //@codekit-append "views/home/grid.js";
 //@codekit-append "views/home/player.js";

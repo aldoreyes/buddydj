@@ -20,6 +20,9 @@ FDJ.Models.Song = Backbone.Model.extend({
 					this.set('artist', groups[1].replace(/_/g, ' '));
 					this.set('album', groups[2].replace(/_/g, ' '));
 					break;
+				case "8tracks":
+					this.set('artist','');
+					break;
 				default:
 					this.set('artist','');
 					break;

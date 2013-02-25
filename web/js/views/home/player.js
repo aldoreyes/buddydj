@@ -5,12 +5,19 @@ FDJ.Views.YTPlayer = Backbone.View.extend({
 	initialize:function(){
 		this.listenTo(this.model, 'change:loaded', this.createPlayer);
 		this.listenTo(this.model, 'change:song', this.onSongChange);
+		this.listenTo(this.model, 'change:paused', this.onPausedChange);
 	},
 
 	onSongChange:function(){
-		console.log("onSongChange");
 		this.model.get('player').loadVideoById(this.model.get('song').get('videoId'));
-		this.model.get('player').playVideo();
+	},
+
+	onPausedChange:function(){
+		if(!this.model.get('paused')){
+			this.model.get('player').playVideo();
+		}else{
+			this.model.get('player').pauseVideo();
+		}
 	},
 
 	createPlayer:function(){

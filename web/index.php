@@ -82,25 +82,7 @@
 		<script type="text/template" id="home-template">
 			<div class="navbar navbar-inverse navbar-fixed-top">
 				<div id="header" class="navbar-inner">
-			        <div class="container-fluid">
-						<a class="brand" href="#">Facebook DJ</a>
-						<div class="nav-collapse collapse">
-							<p id="fbInfoViewEl" class="navbar-text pull-right"></p>
-						</div>
-						<div class="nav-collapse collapse">
-							<p class="navbar-text">
-								<p class="pull-left text-warning">
-									<img src="https://fbcdn-profile-a.akamaihd.net/hprofile-ak-snc6/275957_7000452_1026323116_q.jpg" width="25" height="25"/>
-									Currently playing: Whatever by Foo Fighter
-								</p>
-								<p class="pull-left text-warning">
-									<button class="btn btn-mini" type="button">Play</button>
-									<button class="btn btn-mini" type="button">Stop</button>
-									<button class="btn btn-mini" type="button">Skip</button>
-								</p>
-				            </p>
-						</div>
-			        </div>	
+			        	
 			    </div>
 			</div>
 			<div id="gridViewEl"></div>
@@ -116,6 +98,33 @@
 				</div>
 			</div>
 			<div id="modalViewEl"></div>
+		</script>
+		<!--
+		***************************************
+		***** Template: Header
+		***************************************
+		-->
+		<script type="text/template" id="header-template">
+			<div class="container-fluid">
+				<a class="brand" href="#">Facebook DJ</a>
+				<div class="nav-collapse collapse">
+					<p id="fbInfoViewEl" class="navbar-text pull-right"></p>
+				</div>
+				<div class="nav-collapse collapse">
+					<p class="navbar-text">
+						<p id="player_controls_container" class="pull-left text-warning">
+							<button id="play_button" class="btn btn-mini" type="button">Play</button>
+							<button id="skip_button" class="btn btn-mini" type="button">Skip</button>
+						</p>
+						<div id="header-current-song" class="pull-left text-warning">
+							<img src="https://fbcdn-profile-a.akamaihd.net/hprofile-ak-snc6/275957_7000452_1026323116_q.jpg" width="25" height="25"/>
+							<p>Currently playing: Whatever by Foo Fighter</p>
+						</div>
+						
+		            </p>
+				</div>
+	        </div>
+			
 		</script>
 		<!--
 		***************************************

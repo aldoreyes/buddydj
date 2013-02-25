@@ -104,6 +104,19 @@ body {
   left:-1000px;
 }
 
+/*Header*/
+#header-current-song {
+  margin:0px 10px;
+}
+#header-current-song p{
+  display:inline-block;
+  margin: 0 10px;
+}
+
+#header-current-song img{
+  float:left;
+}
+
 
 /* Start: Recommended Isotope styles */
 

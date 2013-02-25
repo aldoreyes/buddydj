@@ -21,7 +21,6 @@ FDJ.Views.MainView = Backbone.View.extend({
 					
 					this.$el.html(new FDJ.Views.LoaderView({ model: this.model }).$el);
 					this.$el.append(new FDJ.Views.YTPlayer({model:this.model.get('youtubeProxy')}).$el);
-					console.log(this.$el.html());
 					this.model.get('youtubeProxy').loadAndInit();
 				},
 				

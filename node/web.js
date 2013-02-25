@@ -24,10 +24,9 @@ app.all('*', function(req, res, next) {
   ];
   //allow CORS 
   if(allowedHost.indexOf(req.headers.origin) !== -1) {
-
     res.header('Access-Control-Allow-Origin', req.headers.origin);
     res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    res.header('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version');
     next();
   }else{
     res.send({auth: false});
