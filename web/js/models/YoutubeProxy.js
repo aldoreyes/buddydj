@@ -23,6 +23,7 @@ FDJ.Models.YoutubeProxy = Backbone.Model.extend({
 			this.set('paused', false);
 		}
 		else{
+			console.log('song skipped - not found');
 			this.trigger("complete");
 		}
 	},
